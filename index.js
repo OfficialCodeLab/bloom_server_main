@@ -25,6 +25,48 @@ let winston = require("winston");
 console.log("Loading BLOOM imports...");
 
 // TODO: Import all your necessary things here.
+var path = require('path');
+var EmailTemplates = require('swig-email-templates');
+var nodemailer = require('nodemailer');
+var admin = require("firebase-admin");
+var rek = require('rekuire');
+var moment = require('moment');
+// var schedule = require('node-schedule');
+var templates = new EmailTemplates({
+  root: path.join(__dirname, "templates")
+});
+
+
+/*======================================================================*\
+    Initialize Section
+\*======================================================================*/
+
+var mailLogin = rek("credentials/bloom-gmail.json");
+
+// Set up nodemailer transporter with an account
+var transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+        user: mailLogin.email,
+        pass: mailLogin.pass
+    }
+});
+
+
+/*======================================================================*\
+    Set up firebase and database reference as variables
+\*======================================================================*/
+
+var serviceAccount = rek("credentials/pear-server-d23d792fe506.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://pear-server.firebaseio.com"
+});
+
+// As an admin, the app has access to read and write all data, regardless of Security Rules
+var db = admin.database();
+var ref = db.ref("restricted_access/secret_document");
 
 console.log("... done.");
 
@@ -32,7 +74,7 @@ console.log("Requiring BLOOM modules...");
 
 // TODO: Require all your bloom modules here, and init if necessary.
 let databaseMonitor = require("./components/modules/databaseMonitor");
-databaseMonitor.init( /* admin, templates, transporter */);
+databaseMonitor.init(admin, templates, transporter);
 
 console.log("...done!");
 

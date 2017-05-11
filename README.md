@@ -19,8 +19,8 @@ but can be configured to work with any front-end framework or system.
 
 ### 1. Clone and install dependencies
 
-    $ git clone PATH_TO_THIS_REPO bloom_server/
-    $ cd bloom_server
+    $ git clone https://github.com/OfficialCodeLab/bloom_server_main.git 
+    $ cd bloom_server_main
     $ npm install -g yarn
     $ yarn
     

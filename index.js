@@ -4,19 +4,19 @@
  ============================================================================*/
 
 // These are for the welcome messages / git information
-let consoleMessages = require("./components/messages/messages.js");
+var consoleMessages = require("./components/messages/messages.js");
 consoleMessages.welcome();
 
 // Imports for running an API
-let express = require('express');
-let cors = require('cors');
-let request = require('request');
-let open = require("open");
-let SETTINGS = require("./settings.json");
-let run_once = require("./components/tasks/run_once.js");
+var express = require('express');
+var cors = require('cors');
+var request = require('request');
+var open = require("open");
+var SETTINGS = require("./settings.json");
+var run_once = require("./components/tasks/run_once.js");
 
 // Imports for Logging library
-let winston = require("winston");
+var winston = require("winston");
 
 /*============================================================================
     Imports for Bloom
@@ -95,8 +95,8 @@ winston.level = 'debug';
     Configuration for API
  ============================================================================*/
 
-let app = express();
-let bodyParser = require("body-parser");
+var app = express();
+var bodyParser = require("body-parser");
 
 app.use(bodyParser.urlencoded({
     extended: false,
@@ -133,7 +133,7 @@ app.listen(SETTINGS.SERVER_PORT, function() {
     console.log('API Server running on port ' + SETTINGS.SERVER_PORT + '!\n');
     //Only do this once the server is running:\n
 
-    let rest_driver = require("./components/REST/driver");
+    var rest_driver = require("./components/REST/driver");
 
     //Launch the rest api
     rest_driver.init(app);

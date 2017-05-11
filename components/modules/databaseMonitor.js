@@ -13,18 +13,18 @@ function init(admin, templates, transporter) {
         If the child of a user changes, run this code.
     \*======================================================================*/
     admin.database().ref('users').on('child_changed', function(snapshot) {
-        let user = snapshot.val();
+        var user = snapshot.val();
         if (user.accountType === "vendor" && user.vendorRequest === true) {
             admin.database().ref('users/' + snapshot.key).update({
                 vendorRequest: false
             });
             if (user.email) {
-                let vendorWelcome = {
+                var vendorWelcome = {
                     name : user.name
                 };
                 templates.render('registeredVendor.html', vendorWelcome, function(err, html, text) {
 
-                    let mailOptions = {
+                    var mailOptions = {
                         from: 'info@pear.life', // sender address
                         replyTo: 'noreply@pear.life', //Reply to address
                         to: user.email, // list of receivers

@@ -2,7 +2,7 @@
     Bloom Production Server!
     Developed by CodeLab
  ============================================================================*/
-"use strict";
+
 // These are for the welcome messages / git information
 let consoleMessages = require("./components/messages/messages.js");
 consoleMessages.welcome();
@@ -25,14 +25,14 @@ let winston = require("winston");
 console.log("Loading BLOOM imports...");
 
 // TODO: Import all your necessary things here.
-let path = require('path');
-let EmailTemplates = require('swig-email-templates');
-let nodemailer = require('nodemailer');
-let admin = require("firebase-admin");
-let rek = require('rekuire');
-let moment = require('moment');
+var path = require('path');
+var EmailTemplates = require('swig-email-templates');
+var nodemailer = require('nodemailer');
+var admin = require("firebase-admin");
+var rek = require('rekuire');
+var moment = require('moment');
 // var schedule = require('node-schedule');
-let templates = new EmailTemplates({
+var templates = new EmailTemplates({
   root: path.join(__dirname, "templates")
 });
 
@@ -41,10 +41,10 @@ let templates = new EmailTemplates({
     Initialize Section
 \*======================================================================*/
 
-let mailLogin = rek("credentials/bloom-gmail.json");
+var mailLogin = rek("credentials/bloom-gmail.json");
 
 // Set up nodemailer transporter with an account
-let transporter = nodemailer.createTransport({
+var transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
         user: mailLogin.email,
@@ -57,7 +57,7 @@ let transporter = nodemailer.createTransport({
     Set up firebase and database reference as variables
 \*======================================================================*/
 
-let serviceAccount = rek("credentials/pear-server-d23d792fe506.json");
+var serviceAccount = rek("credentials/pear-server-d23d792fe506.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -65,8 +65,8 @@ admin.initializeApp({
 });
 
 // As an admin, the app has access to read and write all data, regardless of Security Rules
-let db = admin.database();
-let ref = db.ref("restricted_access/secret_document");
+var db = admin.database();
+var ref = db.ref("restricted_access/secret_document");
 
 console.log("... done.");
 

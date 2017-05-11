@@ -1,5 +1,5 @@
 {
-    "SERVER_NAME" : "Expressifier",
+    "SERVER_NAME" : "Bloom Server",
     "CREATE_DIRECTORIES" : true,
     "DIRECTORIES" : [
         "./datafiles",

@@ -1,7 +1,7 @@
 var getRepoInfo = require('git-repo-info');
 var colors = require('colors');
 var info = getRepoInfo();
-var version_string = "1.0.0";
+var version_string = "2.0.0-alpha.1";
 var testDate = new Date(info.authorDate);
 var SETTINGS = require("../../settings.json");
 

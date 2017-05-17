@@ -52,6 +52,19 @@ var transporter = nodemailer.createTransport({
     }
 });
 
+/*======================================================================*\
+    Mailgun credentials
+\*======================================================================*/
+
+var mailgunCredentials = rek("credentials/mailgun-credentials.json");
+
+var mailgunDomain = mailgunCredentials.baseURL;
+var mailgunApiKey =mailgunCredentials.apiKey;
+
+var mailgun = require('mailgun-js')({ apiKey: mailgunApiKey, domain: mailgunDomain });
+
+var mailcomposer = require('mailcomposer');
+
 
 /*======================================================================*\
     Set up firebase and database reference as variables
@@ -74,7 +87,7 @@ console.log("Requiring BLOOM modules...");
 
 // TODO: Require all your bloom modules here, and init if necessary.
 let databaseMonitor = require("./components/modules/databaseMonitor");
-databaseMonitor.init(admin, templates, transporter);
+databaseMonitor.init(admin, templates, transporter, mailgun, mailcomposer);
 
 console.log("...done!");
 

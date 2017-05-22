@@ -235,7 +235,7 @@ function init(admin, templates, transporter, mailgun, mailcomposer) {
                     text: text //Text equivalent
                 };
 
-                sendMail(mailOptions, function() {
+                sendMail(mailOptions2, function() {
                     admin.database().ref('vendorLogins/' + snapshot.key).update({
                         passTemp: null
                     });

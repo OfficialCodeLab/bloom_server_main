@@ -1,4 +1,5 @@
 @import 'https://fonts.googleapis.com/css?family=Open+Sans:400,600i,700i|Roboto';
+@import 'https://fonts.googleapis.com/css?family=Great+Vibes';
 
 html, body {
   font-family: "Open Sans", sans-serif !important;
@@ -184,8 +185,7 @@ p {
 //TEMPLATES
 
 //DEFAULT
-.cursive-text {
-	h1 {
+.cursive-text h1 {
 		font-size: 92px !important;
 		font-family: "Great Vibes", cursive !important;
 		background: -webkit-radial-gradient(#EFCAC1, #D5A29E);
@@ -195,8 +195,6 @@ p {
 		padding-bottom: 40px;
 		padding-top: 40px;
 		margin: 0px;
-
-	}
 }
 
 .default-main-body {
@@ -205,25 +203,28 @@ p {
 
 .default-section-1 {
 	position: relative;
-	p {
-		max-width: 80%;
-		margin: 0 auto;
-		padding-left: 20px;
-		padding-right: 20px;
-		font-size: 18px;
-		font-weight: 600;
-	}
 	padding-bottom: 30px;
+}
+.default-section-1 p {
+  max-width: 80%;
+  margin: 0 auto;
+  padding-left: 20px;
+  padding-right: 20px;
+  font-size: 18px;
+  font-weight: 600;
 }
 
 .default-section-2 {
 	position: relative;
-	p {
-		padding-left: 20px;
-		padding-right: 20px;
-		font-size: 16px;
-	}
 }
+
+.default-section-2 p {
+  padding-left: 20px;
+  padding-right: 20px;
+  font-size: 16px;
+}
+
+
 .default-foreground {
 	position: relative;
 	z-index: 3;
@@ -276,20 +277,23 @@ p {
 	min-height: 40px;
 
 	/*Styling*/
-	border: 3px solid $color-main;
-	@include border-radius (3px);
-	background-color: $color-main;
+	border: 3px solid #F8BBD0;
+    -webkit-border-radius: 3px;
+       -moz-border-radius: 3px;
+        -ms-border-radius: 3px;
+            border-radius: 3px;
+	background-color: #F8BBD0;
 }
 
 .default-accept-btn:active, :hover, :focus {
-  background-color:$color-main;
-  border: 3px solid $color-main;
+  background-color:#F8BBD0;
+  border: 3px solid #F8BBD0;
   color: white;
 }
 
 .default-decline-btn{
     padding:0px;
-    color: $color-main;
+    color: #F8BBD0;;
     font-size: 20px;
 	margin-top: 7px;
 	margin-bottom: 7px;
@@ -300,14 +304,17 @@ p {
 	min-height: 40px;
 
 	/*Styling*/
-	border: 3px solid $color-main;
-	@include border-radius (3px);
+	border: 3px solid #F8BBD0;
+    -webkit-border-radius: 3px;
+       -moz-border-radius: 3px;
+        -ms-border-radius: 3px;
+            border-radius: 3px;
 	background-color: white;
 }
 
 
 .default-decline-btn:active, :hover, :focus {
   background-color:white;
-  border: 3px solid $color-main;
-  color: $color-main;
+  border: 3px solid #F8BBD0;
+  color: #F8BBD0;
 }

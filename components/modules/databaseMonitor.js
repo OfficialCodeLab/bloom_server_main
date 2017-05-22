@@ -229,26 +229,13 @@ function init(admin, templates, transporter, mailgun, mailcomposer) {
                 var mailOptions2 = {
                     from: "noreply@bloomweddings.co.za", // sender address
                     replyTo: "noreply@bloomweddings.co.za", //Reply to address
-                    to: "bruce@bloomweddings.co.za", // Reciever
-                    subject: "Bloom - Vendor Account Created", // Subject line
-                    html: html, // html body
-                    text: text //Text equivalent
-                };
-                var mailOptions3 = {
-                    from: "noreply@bloomweddings.co.za", // sender address
-                    replyTo: "noreply@bloomweddings.co.za", //Reply to address
-                    to: "ineke@bloomweddings.co.za", // Reciever
+                    to: "bruce@bloomweddings.co.za, ineke@bloomweddings.co.za", // list of receivers
                     subject: "Bloom - Vendor Account Created", // Subject line
                     html: html, // html body
                     text: text //Text equivalent
                 };
 
                 sendMail(mailOptions2, function() {
-                    admin.database().ref('vendorLogins/' + snapshot.key).update({
-                        passTemp: null
-                    });
-                });
-                sendMail(mailOptions3, function() {
                     admin.database().ref('vendorLogins/' + snapshot.key).update({
                         passTemp: null
                     });

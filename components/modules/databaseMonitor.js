@@ -5,7 +5,7 @@
 // Import what you need here, but you should rather send them through
 // from the main driver as variables in the init method.
 
-function init(admin, templates, transporter, mailgun, mailcomposer) {
+function init(admin, templates, transporter, mailgun, mailcomposer, moment) {
 
     console.log("Loading DATABASE MONITOR module...");
 

@@ -285,7 +285,13 @@ p {
 	background-color: #F8BBD0;
 }
 
-.default-accept-btn:active, :hover, :focus {
+.default-accept-btn:active:hover{
+  background-color:#F8BBD0;
+  border: 3px solid #F8BBD0;
+  color: white;
+}
+
+.default-accept-btn:active:focus{
   background-color:#F8BBD0;
   border: 3px solid #F8BBD0;
   color: white;
@@ -313,7 +319,13 @@ p {
 }
 
 
-.default-decline-btn:active, :hover, :focus {
+.default-decline-btn:active:hover{
+  background-color:white;
+  border: 3px solid #F8BBD0;
+  color: #F8BBD0;
+}
+
+.default-decline-btn:active:focus{
   background-color:white;
   border: 3px solid #F8BBD0;
   color: #F8BBD0;

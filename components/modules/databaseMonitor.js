@@ -256,6 +256,96 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment) {
 
 
     /*======================================================================*\
+        If a guestList is created
+    \*======================================================================*/
+    admin.database().ref('guestLists').on('child_added', function(snapshot) {
+
+        var list = snapshot.val();
+
+        if(list.completed === false || list.completed === 'false') {
+          var id = snapshot.key;
+          var acceptUrl = "https://bloomweddings.co.za/weddingInvite?id=" + list.userId;
+          var declineUrl = "https://bloomweddings.co.za/weddingInvite?id=" + list.userId;
+          var details = list.details;
+
+          admin.database().ref('weddings/' + id).once('value').then(function(_snapshot) {
+            var guests = _snapshot.guests;
+            var length = guests.length;
+            var promiseArr = [];
+            var count = 0;
+            //for each guest do the following
+            //Object.assign(obj1, obj2); to merge
+
+            for (var key in guests) {
+              if (guests.hasOwnProperty(key)) {
+                //console.log(key + " -> " + guests[key]);
+
+                promiseArr[count] = new Promise((resolve, reject) => {
+                  var _id = key;
+                  admin.database().ref('guests/' + _id).once('value').then(function(__snapshot) {
+                    var name = __snapshot.name;
+                    var email = __snapshot.email;
+                    var _acceptUrl = acceptUrl + "&accept="+_id;
+                    var _declineUrl = declineUrl + "&decline="+_id;
+                    var guest = {
+                      id: _id,
+                      name: name,
+                      email: email,
+                      acceptUrl: _acceptUrl,
+                      declineUrl: _declineUrl
+                    };
+                    resolve(guest);
+                  }, function(){
+                    var failed = {
+                      id: _id,
+                      error: "Could not find guest"
+                    };
+                    resolve(failed);
+                  });
+                });
+              }
+              count++;
+            }
+
+            Promise.all(promiseArr),then((guests) => {
+              for (var i = 0; i < guests.length; i++) {
+                // do something with each guests[i]
+              }
+            });
+
+
+          });
+
+        }
+
+        var details = {
+            name: invite.name,
+            _name: invite.sender,
+            imgUrl: invite.imgUrl,
+            acceptUrl: acceptUrl
+        };
+
+        if (true) { // Edit preferences will change this
+            templates.render('innerCircleInvite.html', details, function(err, html, text) {
+                var mailOptions = {
+                    from: "noreply@bloomweddings.co.za", // sender address
+                    replyTo: "noreply@bloomweddings.co.za", //Reply to address
+                    to: invite.emailId, // list of receivers
+                    subject: "Bloom - Inner Circle Invite", // Subject line
+                    html: html, // html body
+                    text: text //Text equivalent
+                };
+
+                sendMail(mailOptions, function() {
+
+                });
+            });
+
+        }
+
+    });
+
+    /*======================================================================*\
         If an inner circle invite is created
     \*======================================================================*/
     admin.database().ref('innerCircleInvites').on('child_added', function(snapshot) {

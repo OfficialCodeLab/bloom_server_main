@@ -319,7 +319,7 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment) {
                 email = user.email;
 
                 for (var i = 0; i < guests.length; i++) {
-                  console.log("GUEST: " + i +" - " guests[i].email);
+                  console.log("GUEST: " + i + " - " + guests[i].email);
                   // do something with each guests[i]
                   var successCount = 0; //Check this + failed to match length and mail user
                   var failCount = 0;
@@ -332,7 +332,7 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment) {
                       Object.assign(detailsCopy, guest[i]);
                       detailsCopy.name = ", " + detailsCopy.name + "!";
                       detailsCopy.to = guests[i].email;
-                      console.log(detailsCopy);
+                      console.log(JSON.stringify(detailsCopy));
 
                       templates.render('weddingInvite1.html', detailsCopy, function(err, html, text) {
                           var mailOptions = {

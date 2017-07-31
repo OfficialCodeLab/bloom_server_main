@@ -310,8 +310,9 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment) {
               count++;
             }
 
+            console.log("I LOVE ASYNC PROGRAMMING: " + count + " lel: " + promiseArr.length);
             Promise.all(promiseArr).then((guests) => {
-              console.log("GUESTS PROCESSED");
+              console.log("GUESTS PROCESSED, total " + guests.length + " guests");
               var failed = [];
               admin.database().ref('users/' + id).once('value').then(function(userSnapshot) {
                 var user = userSnapshot.val();

@@ -310,7 +310,7 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment) {
               count++;
             }
 
-            Promise.all(promiseArr),then((guests) => {
+            Promise.all(promiseArr).then((guests) => {
               var failed = [];
 
               for (var i = 0; i < guests.length; i++) {

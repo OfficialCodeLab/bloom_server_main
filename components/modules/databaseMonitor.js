@@ -312,44 +312,47 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment) {
 
             Promise.all(promiseArr).then((guests) => {
               var failed = [];
+              admin.database().ref('users/' + id).once('value').then(function(userSnapshot) {
+                var user = userSnapshot.val();
+                name = user.name;
+                email = user.email;
 
-              for (var i = 0; i < guests.length; i++) {
-                // do something with each guests[i]
-                var successCount = 0; //Check this + failed to match length and mail user
-                var failCount = 0;
+                for (var i = 0; i < guests.length; i++) {
+                  // do something with each guests[i]
+                  var successCount = 0; //Check this + failed to match length and mail user
+                  var failCount = 0;
 
-                // Regex check email -> If fail, add to error list
-                if (validateEmail(email)) { //valid
-                  admin.database().ref('users/' + id).once('value').then(function(userSnapshot) {
-                    var user = userSnapshot.val();
-                    name = user.name;
-                    email = user.email;
+                  // Regex check email -> If fail, add to error list
+                  if (validateEmail(email)) { //valid
 
-                    // merge data
-                    var detailsCopy = details;
-                    Object.assign(detailsCopy, guest[i]);
-                    detailsCopy.name = ", " + detailsCopy.name + "!";
+                      // merge data
+                      var detailsCopy = details;
+                      Object.assign(detailsCopy, guest[i]);
+                      detailsCopy.name = ", " + detailsCopy.name + "!";
+                      detailsCopy.to = guests[i].email;
 
-                    templates.render('weddingInvite1.html', detailsCopy, function(err, html, text) {
-                        var mailOptions = {
-                            from: "noreply@bloomweddings.co.za", // sender address
-                            replyTo: email, //Reply to address
-                            to: guest[i].email, // list of receivers
-                            subject: "Bloom - You have been invited to a wedding!", // Subject line
-                            html: html, // html body
-                            text: text //Text equivalent
-                        };
 
-                        sendMail(mailOptions, function() {
-                          successCount++;
-                        });
-                    });
-                  });
-                } else { //invalid
-                  failCount++;
-                  failed.pushObject(guest[i].name + " (" + guest[i].email + ") does not have a valid email address.");
+                      templates.render('weddingInvite1.html', detailsCopy, function(err, html, text) {
+                          var mailOptions = {
+                              from: "noreply@bloomweddings.co.za", // sender address
+                              replyTo: email, //Reply to address
+                              to: detailsCopy.to, // list of receivers
+                              subject: "Bloom - You have been invited to a wedding!", // Subject line
+                              html: html, // html body
+                              text: text //Text equivalent
+                          };
+
+                          sendMail(mailOptions, function() {
+                            successCount++;
+                          });
+                      });
+                  } else { //invalid
+                    failCount++;
+                    console.log("GUEST FAILED");
+                    failed.pushObject(guest[i].name + " (" + guest[i].email + ") does not have a valid email address.");
+                  }
                 }
-              }
+              });
 
               //Completion checker
               var complete = {
@@ -564,7 +567,6 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment) {
 
             mailgun.messages().sendMime(dataToSend, function(sendError, body) {
                 if (sendError) {
-                    console.log("MAIL FAILED " + dataToSend.message + ". TO: " + to);
                     console.log(sendError);
                     return;
                 } else {

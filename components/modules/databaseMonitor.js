@@ -344,6 +344,7 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment) {
                           successCount++;
                         });
                     });
+                  });
                 } else { //invalid
                   failCount++;
                   failed.pushObject(guest[i].name + " (" + guest[i].email + ") does not have a valid email address.");

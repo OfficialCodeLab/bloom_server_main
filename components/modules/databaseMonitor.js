@@ -333,7 +333,7 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment) {
                       detailsCopy.to = guests[i].email;
                       // console.log(JSON.stringify(detailsCopy));
 
-                      renderInvite(detailsCopy);
+                      renderInvite(JSON.parse(JSON.stringify(detailsCopy)));
 
                   } else { //invalid
                     failCount++;
@@ -343,24 +343,26 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment) {
                 }
               });
 
-              function renderInvite (detailsCurrent) {
-                  templates.render('weddingInvite1.html', detailsCurrent, function(err, html, text) {
-                      var mailOptions = {
-                          from: "noreply@bloomweddings.co.za", // sender address
-                          replyTo: email, //Reply to address
-                          to: detailsCurrent.to, // list of receivers
-                          subject: "Bloom - You have been invited to a wedding!", // Subject line
-                          html: html, // html body
-                          text: text //Text equivalent
-                      };
+              function renderInvite (_details) {
+                templates.render('weddingInvite1.html', this._details, function(err, html, text) {
+                    var mailOptions = {
+                        from: "noreply@bloomweddings.co.za", // sender address
+                        replyTo: email, //Reply to address
+                        to: this._details.to, // list of receivers
+                        subject: "Bloom - You have been invited to a wedding!", // Subject line
+                        html: html, // html body
+                        text: text //Text equivalent
+                    };
 
-                      sendMail(mailOptions, function() {
-                        successCount++;
-                      });
-                  });
+                    sendMail(mailOptions, function() {
+                      successCount++;
+                    });
+                });
               }
 
               //Completion checker
+              var completeCount = 0;
+
               var complete = {
                   init: function() {
                       complete.checkCompletion();

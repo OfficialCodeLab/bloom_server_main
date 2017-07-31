@@ -331,22 +331,10 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment) {
                       Object.assign(detailsCopy, guests[i]);
                       detailsCopy.name = ", " + detailsCopy.name + "!";
                       detailsCopy.to = guests[i].email;
-                      console.log(JSON.stringify(detailsCopy));
+                      // console.log(JSON.stringify(detailsCopy));
 
-                      templates.render('weddingInvite1.html', detailsCopy, function(err, html, text) {
-                          var mailOptions = {
-                              from: "noreply@bloomweddings.co.za", // sender address
-                              replyTo: email, //Reply to address
-                              to: detailsCopy.to, // list of receivers
-                              subject: "Bloom - You have been invited to a wedding!", // Subject line
-                              html: html, // html body
-                              text: text //Text equivalent
-                          };
+                      renderInvite(detailsCopy);
 
-                          sendMail(mailOptions, function() {
-                            successCount++;
-                          });
-                      });
                   } else { //invalid
                     failCount++;
                     console.log("GUEST FAILED");
@@ -354,6 +342,23 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment) {
                   }
                 }
               });
+
+              function renderInvite (detailsCurrent) {
+                  templates.render('weddingInvite1.html', detailsCurrent, function(err, html, text) {
+                      var mailOptions = {
+                          from: "noreply@bloomweddings.co.za", // sender address
+                          replyTo: email, //Reply to address
+                          to: detailsCurrent.to, // list of receivers
+                          subject: "Bloom - You have been invited to a wedding!", // Subject line
+                          html: html, // html body
+                          text: text //Text equivalent
+                      };
+
+                      sendMail(mailOptions, function() {
+                        successCount++;
+                      });
+                  });
+              }
 
               //Completion checker
               var complete = {
@@ -375,6 +380,8 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment) {
                       }
                   }
               }
+
+              complete.init();
 
               // Mail user with invites sent report & missed invites list
               function sendReportMail () {

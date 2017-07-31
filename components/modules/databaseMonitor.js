@@ -344,15 +344,15 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment) {
               });
 
               function renderInvite (_details) {
-                templates.render('weddingInvite1.html', this._details, function(err, html, text) {
-                    var mailOptions = {
-                        from: "noreply@bloomweddings.co.za", // sender address
-                        replyTo: email, //Reply to address
-                        to: this._details.to, // list of receivers
-                        subject: "Bloom - You have been invited to a wedding!", // Subject line
-                        html: html, // html body
-                        text: text //Text equivalent
-                    };
+                var mailOptions = {
+                    from: "noreply@bloomweddings.co.za", // sender address
+                    replyTo: email, //Reply to address
+                    to: _details.to, // list of receivers
+                    subject: "Bloom - You have been invited to a wedding!" // Subject line
+                };
+                templates.render('weddingInvite1.html', _details, function(err, html, text) {
+                    mailOptions.html = html;
+                    mailOptions.text = text;
 
                     sendMail(mailOptions, function() {
                       successCount++;

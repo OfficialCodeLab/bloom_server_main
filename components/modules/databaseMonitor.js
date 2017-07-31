@@ -265,8 +265,8 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment) {
         if(list.completed === false || list.completed === 'false') {
           console.log("Wedding invites created.");
           var id = snapshot.key;
-          var acceptUrl = "https://bloomweddings.co.za/weddingInvite?id=" + list.userId;
-          var declineUrl = "https://bloomweddings.co.za/weddingInvite?id=" + list.userId;
+          var acceptUrl = "https://bloomweddings.co.za/weddingInvite?id=" + id;
+          var declineUrl = "https://bloomweddings.co.za/weddingInvite?id=" + ld;
           var details = list.details;
           var name = "";
           var email = "";
@@ -288,8 +288,9 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment) {
                 promiseArr[count] = new Promise((resolve, reject) => {
                   var _id = key;
                   admin.database().ref('guests/' + _id).once('value').then(function(__snapshot) {
-                    var name = __snapshot.name;
-                    var email = __snapshot.email;
+                    var guest = __snapshot.val();
+                    var name = guest.name;
+                    var email = guest.email;
                     var _acceptUrl = acceptUrl + "&accept="+_id;
                     var _declineUrl = declineUrl + "&decline="+_id;
                     var guest = {

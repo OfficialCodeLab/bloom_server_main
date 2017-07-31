@@ -564,6 +564,7 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment) {
 
             mailgun.messages().sendMime(dataToSend, function(sendError, body) {
                 if (sendError) {
+                    console.log("MAIL FAILED " + dataToSend.message + ". TO: " + to);
                     console.log(sendError);
                     return;
                 } else {

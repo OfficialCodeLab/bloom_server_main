@@ -558,24 +558,32 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment) {
     function sendMail (mailOptions, callback) {
         var mail = mailcomposer(mailOptions);
 
-        mail.build(function(mailBuildError, message) {
+        if(mailOptions.to) {
+          if(validateEmail(mailOptions.to)){
+            mail.build(function(mailBuildError, message) {
 
-            var dataToSend = {
-                to: mailOptions.to,
-                message: message.toString('ascii')
-            };
+                var dataToSend = {
+                    to: mailOptions.to,
+                    message: message.toString('ascii')
+                };
 
-            mailgun.messages().sendMime(dataToSend, function(sendError, body) {
-                if (sendError) {
-                    console.log(dataToSend.message);
-                    console.log(sendError);
-                    return;
-                } else {
-                    console.log("Message sent to Mailgun: " + body.message);
-                    callback();
-                }
+                mailgun.messages().sendMime(dataToSend, function(sendError, body) {
+                    if (sendError) {
+                        console.log(sendError);
+                        return;
+                    } else {
+                        console.log("Message sent to Mailgun: " + body.message);
+                        callback();
+                    }
+                });
             });
-        });
+          } else {
+            console.log("Message blocked, invalid email address");
+          }
+        } else {
+          console.log("Message blocked, no email address");
+        }
+
     }
 
     function validateEmail(email) {

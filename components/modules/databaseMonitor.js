@@ -272,7 +272,7 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment) {
           var email = "";
 
           admin.database().ref('weddings/' + id).once('value').then(function(_snapshot) {
-            var guests = _snapshot.guests;
+            var guests = _snapshot.val().guests;
             // var length = guests.length;
             var promiseArr = [];
             var count = 0;

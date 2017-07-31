@@ -263,10 +263,13 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment) {
         var list = snapshot.val();
 
         if(list.completed === false || list.completed === 'false') {
+          console.log("Wedding invites created.");
           var id = snapshot.key;
           var acceptUrl = "https://bloomweddings.co.za/weddingInvite?id=" + list.userId;
           var declineUrl = "https://bloomweddings.co.za/weddingInvite?id=" + list.userId;
           var details = list.details;
+          var name = "";
+          var email = "";
 
           admin.database().ref('weddings/' + id).once('value').then(function(_snapshot) {
             var guests = _snapshot.guests;
@@ -308,38 +311,120 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment) {
             }
 
             Promise.all(promiseArr),then((guests) => {
+              var failed = [];
+
               for (var i = 0; i < guests.length; i++) {
                 // do something with each guests[i]
+                var successCount = 0; //Check this + failed to match length and mail user
+                var failCount = 0;
+
+                // Regex check email -> If fail, add to error list
+                if (validateEmail(email)) { //valid
+                  admin.database().ref('users/' + id).once('value').then(function(userSnapshot) {
+                    var user = userSnapshot.val();
+                    name = user.name;
+                    email = user.email;
+
+                    // merge data
+                    var detailsCopy = details;
+                    Object.assign(detailsCopy, guest[i]);
+                    detailsCopy.name = ", " + detailsCopy.name + "!";
+
+                    templates.render('weddingInvite1.html', detailsCopy, function(err, html, text) {
+                        var mailOptions = {
+                            from: "noreply@bloomweddings.co.za", // sender address
+                            replyTo: email, //Reply to address
+                            to: guest[i].email, // list of receivers
+                            subject: "Bloom - You have been invited to a wedding!", // Subject line
+                            html: html, // html body
+                            text: text //Text equivalent
+                        };
+
+                        sendMail(mailOptions, function() {
+                          successCount++;
+                        });
+                    });
+                } else { //invalid
+                  failCount++;
+                  failed.pushObject(guest[i].name + " (" + guest[i].email + ") does not have a valid email address.");
+                }
+              }
+
+              //Completion checker
+              var complete = {
+                  init: function() {
+                      complete.checkCompletion();
+                  },
+                  checkCompletion: function() {
+                      if(guests.length === successCount + failCount) {
+                        //completed, mail user
+                        sendReportMail();
+                      } else {
+                        completeCount++;
+                        if(completeCount >= 120) { //Timeout: 120 checks @ 1 per 5 sec -> 10 mins
+                          //completed but timeout, mail user
+                          sendReportMail();
+                        } else {
+                          setTimeout(complete.checkCompletion, 5000);
+                        }
+                      }
+                  }
+              }
+
+              // Mail user with invites sent report & missed invites list
+              function sendReportMail () {
+                console.log("Wedding invites sent out successfully. Sending report mail");
+                //if any failed emails, create string from joining array
+                var failedEmailsStr = "";
+                if(failed.length > 0) {
+                  failedEmailsStr = failed.join('<br>');
+                } else {
+                  failedEmailsStr = "All invites were successfully sent.";
+                }
+
+                var reportDetails = {
+                  name: name,
+                  emailsCount: successCount,
+                  emailsFailed: failedEmailsStr
+                };
+
+                templates.render('weddingInviteReport.html', reportDetails, function(err, html, text) {
+                    var mailOptions = {
+                        from: "noreply@bloomweddings.co.za", // sender address
+                        replyTo: "noreply@bloomweddings.co.za", //Reply to address
+                        to: email, // list of receivers
+                        subject: "Bloom - Your wedding invites report", // Subject line
+                        html: html, // html body
+                        text: text //Text equivalent
+                    };
+
+                    sendMail(mailOptions, function() {
+                      sendInviteCopy();
+                    });
+                });
+              }
+
+              // Send mail to user with invite for missed invites
+              function sendInviteCopy () {
+                details.name = "!";
+                templates.render('weddingInvite1.html', details, function(err, html, text) {
+                    var mailOptions = {
+                        from: "noreply@bloomweddings.co.za", // sender address
+                        replyTo: "noreply@bloomweddings.co.za", //Reply to address
+                        to: email, // list of receivers
+                        subject: "Bloom - You have been invited to a wedding!", // Subject line
+                        html: html, // html body
+                        text: text //Text equivalent
+                    };
+
+                    sendMail(mailOptions, function() {
+                    });
+                });
               }
             });
 
 
           });
-
-        }
-
-        var details = {
-            name: invite.name,
-            _name: invite.sender,
-            imgUrl: invite.imgUrl,
-            acceptUrl: acceptUrl
-        };
-
-        if (true) { // Edit preferences will change this
-            templates.render('innerCircleInvite.html', details, function(err, html, text) {
-                var mailOptions = {
-                    from: "noreply@bloomweddings.co.za", // sender address
-                    replyTo: "noreply@bloomweddings.co.za", //Reply to address
-                    to: invite.emailId, // list of receivers
-                    subject: "Bloom - Inner Circle Invite", // Subject line
-                    html: html, // html body
-                    text: text //Text equivalent
-                };
-
-                sendMail(mailOptions, function() {
-
-                });
-            });
 
         }
 
@@ -486,6 +571,11 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment) {
                 }
             });
         });
+    }
+
+    function validateEmail(email) {
+      var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(email);
     }
 
 

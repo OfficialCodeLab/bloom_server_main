@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+	{% block head %}
+	<link rel="stylesheet" href="css/styles.css">
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	{% endblock %}
+</head>
+<div class="main-block">
+	<div class="text-center default-main-body">
+		<div class="default-name">
+			<h1>Hi, {{name}}.</h1>
+		</div><br />
+		<div class="default-section-1">
+			<div class="default-foreground">
+				<h3>Thanks for sending out your wedding invites with Bloom!</h3>
+			</div>
+		</div>
+		<div class="default-section-2">
+			<div class="default-foreground">
+				<img src='images/emails/parts/hr-top.jpg'><br>
+				<p style="font-size: 20px; font-weight: 600; padding-top: 20px; text-transform: uppercase;">Emails sent:</p>
+				<p>{{emailCount}} emails are on their way</p>
+				<p style="font-size: 20px; font-weight: 600; padding-top: 20px; text-transform: uppercase;">Failed invites:</p>
+				<p>{{emailsFailed}}</p>
+				<p style="font-size: 20px; font-weight: 600; padding-top: 20px; text-transform: uppercase;">Additional instructions:</p>
+				<p>Please check your inbox for a copy of your invite that was sent.<br />Feel free to forward this to failed invites or people you may have missed!</p>
+				<img src='images/emails/parts/hr-bottom.jpg'><br><br>
+				<div class="cascading-buttons">
+					<p>
+						If you have any queries or have encountered any issues, please contact Bloom support:
+					</p>
+					<a href="mailto:support@bloomweddings.co.za" target="_top"><button class="default-accept-btn">Contact Us</button></a><br /><br />
+					<p>
+						support@bloomweddings.co.za
+					</p>
+				</div>
+				<img src='images/bloom-bg3.png' style="padding-top: 30px; max-width: 100%; height: auto; width: 300px;">
+			</div>
+		</div>
+	</div>
+
+	<div class="grey-footer">
+		You have received this email because you have sent out your wedding invites from Bloom. To unsubscribe from all emails from Bloom, <a href="#">click here</a>, or click here to <a href="#">update your email preferences.</a>.<br><br>&copy;
+		2017 Bloom. All Rights Reserved.
+	</div>
+</div>
+
+</html>

@@ -182,14 +182,14 @@ p {
 	color: black;
 }
 
-//TEMPLATES
+/*TEMPLATES*/
 
-//DEFAULT
+/*DEFAULT*/
 .cursive-text h1 {
 		font-size: 92px !important;
 		font-family: "Great Vibes", cursive !important;
 		background: -webkit-radial-gradient(#EFCAC1, #D5A29E);
-		line-height: 80px;
+		line-height: 40px;
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
 		padding-bottom: 40px;

@@ -9,6 +9,9 @@
 </head>
 <div class="main-block">
 	<div class="text-center default-main-body">
+		<div class="default-name">
+			<h1>Hi{{name}}</h1>
+		</div><br />
 		<div class="default-section-1">
 			<div class="default-foreground">
 				<div class="cursive-text">
@@ -34,8 +37,8 @@
 				<p style="padding-top: 50px;">{{contact}}</p>
 				<img src='images/emails/parts/hr-bottom.jpg'><br><br>
 				<div class="cascading-buttons">
-					<button class="default-accept-btn">I Accept</button>
-					<button class="default-decline-btn">I Decline</button>
+					<a href="{{acceptUrl}}"><button class="default-accept-btn">I Accept</button></a>
+					<a href="{{declineUrl}}"><button class="default-decline-btn">I Decline</button></a>
 				</div>
 				<img src='images/bloom-bg3.png' style="padding-top: 50px; max-width: 100%; height: auto; width: 300px;">
 			</div>

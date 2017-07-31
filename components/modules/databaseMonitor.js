@@ -311,6 +311,7 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment) {
             }
 
             Promise.all(promiseArr).then((guests) => {
+              console.log("GUESTS PROCESSED");
               var failed = [];
               admin.database().ref('users/' + id).once('value').then(function(userSnapshot) {
                 var user = userSnapshot.val();
@@ -318,6 +319,7 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment) {
                 email = user.email;
 
                 for (var i = 0; i < guests.length; i++) {
+                  console.log("GUEST: " + i +" - " guests[i].email);
                   // do something with each guests[i]
                   var successCount = 0; //Check this + failed to match length and mail user
                   var failCount = 0;
@@ -330,7 +332,7 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment) {
                       Object.assign(detailsCopy, guest[i]);
                       detailsCopy.name = ", " + detailsCopy.name + "!";
                       detailsCopy.to = guests[i].email;
-
+                      console.log(detailsCopy);
 
                       templates.render('weddingInvite1.html', detailsCopy, function(err, html, text) {
                           var mailOptions = {
@@ -578,7 +580,7 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment) {
                 });
             });
           } else {
-            console.log("Message blocked, invalid email address");
+            console.log("Message blocked, invalid email address: " + mailOptions.to);
           }
         } else {
           console.log("Message blocked, no email address");

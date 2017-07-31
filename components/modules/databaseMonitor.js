@@ -281,7 +281,7 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment) {
 
             for (var key in guests) {
               if (guests.hasOwnProperty(key)) {
-                //console.log(key + " -> " + guests[key]);
+                console.log(key + " -> " + guests[key]);
 
                 promiseArr[count] = new Promise((resolve, reject) => {
                   var _id = key;

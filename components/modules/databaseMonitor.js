@@ -273,7 +273,7 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment) {
 
           admin.database().ref('weddings/' + id).once('value').then(function(_snapshot) {
             var guests = _snapshot.guests;
-            var length = guests.length;
+            // var length = guests.length;
             var promiseArr = [];
             var count = 0;
             //for each guest do the following

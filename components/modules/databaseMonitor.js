@@ -312,17 +312,16 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment) {
               count++;
             }
 
-            console.log("I LOVE ASYNC PROGRAMMING: " + count + " lel: " + promiseArr.length);
             Promise.all(promiseArr).then((guests) => {
-              console.log("GUESTS PROCESSED, total " + guests.length + " guests");
               var failed = [];
+              console.log(JSON.stringify(guests));
               admin.database().ref('users/' + id).once('value').then(function(userSnapshot) {
                 var user = userSnapshot.val();
                 name = user.name;
                 email = user.email;
 
                 for (var i = 0; i < guests.length; i++) {
-                  console.log("GUEST: " + i + " - " + guests[i].email);
+                  console.log(JSON.stringify(guests[i]));
                   // do something with each guests[i]
                   var successCount = 0; //Check this + failed to match length and mail user
                   var failCount = 0;
@@ -332,7 +331,7 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment) {
 
                       // merge data
                       var detailsCopy = details;
-                      Object.assign(detailsCopy, guest[i]);
+                      Object.assign(detailsCopy, guests[i]);
                       detailsCopy.name = ", " + detailsCopy.name + "!";
                       detailsCopy.to = guests[i].email;
                       console.log(JSON.stringify(detailsCopy));
@@ -354,7 +353,7 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment) {
                   } else { //invalid
                     failCount++;
                     console.log("GUEST FAILED");
-                    failed.pushObject(guest[i].name + " (" + guest[i].email + ") does not have a valid email address.");
+                    failed.pushObject(guests[i].name + " (" + guests[i].email + ") does not have a valid email address.");
                   }
                 }
               });

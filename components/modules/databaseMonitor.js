@@ -274,7 +274,6 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment) {
           admin.database().ref('weddings/' + id).once('value').then(function(_snapshot) {
             var wedding = _snapshot.val();
             let guests = wedding.guests;
-            console.log(guests);
             // var length = guests.length;
             var promiseArr = [];
             var count = 0;
@@ -283,7 +282,6 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment) {
 
             for (var key in guests) {
               if (guests.hasOwnProperty(key)) {
-                console.log(key + " -> " + guests[key]);
 
                 promiseArr[count] = new Promise((resolve, reject) => {
                   var _id = key;
@@ -315,17 +313,15 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment) {
 
             Promise.all(promiseArr).then((guests) => {
               var failed = [];
-              console.log(JSON.stringify(guests));
+              var successCount = 0; //Check this + failed to match length and mail user
+              var failCount = 0;
               admin.database().ref('users/' + id).once('value').then(function(userSnapshot) {
                 var user = userSnapshot.val();
                 name = user.name;
                 email = user.email;
 
                 for (var i = 0; i < guests.length; i++) {
-                  console.log(JSON.stringify(guests[i]));
                   // do something with each guests[i]
-                  var successCount = 0; //Check this + failed to match length and mail user
-                  var failCount = 0;
 
                   // Regex check email -> If fail, add to error list
                   if (validateEmail(email)) { //valid

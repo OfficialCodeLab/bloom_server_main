@@ -11,6 +11,8 @@ function init(admin, templates, transporter, mailgun, mailcomposer, rek) {
 
     var moment = rek('moment');
     var wkhtmltopdf = rek('wkhtmltopdf');
+    var Xvfb = rek('xvfb');
+
     var fs = rek('fs');
 
     /*======================================================================*\
@@ -324,25 +326,40 @@ function init(admin, templates, transporter, mailgun, mailcomposer, rek) {
               // var options = { format: 'Letter' };
               var createPDF = new Promise((resolve, reject) => {
                 try {
+                  var Xvfb = require('xvfb');
+                  var xvfb = new Xvfb();
+                  xvfb.start(function(err, xvfbProcess) {
 
-                  wkhtmltopdf(details.downloadURL, { debugJavascript: true }, (error, stream) => {
-                    if (error) {
-                      console.log(error);
-                      return error;
-                    }
-                    const outputPDF = fs.createWriteStream(id + '.pdf');
-                    stream.pipe(outputPDF);
-                    outputPDF.on('finish', function() {
-                      resolve({ fileName: fileName, outputPath: outputPDF.path });
-                      // fs.unlink(response.outputPath);  //to delete
-                    }).on('error', function(err) {
-                      console.log(err);
-                      reject(err);
+                    wkhtmltopdf(details.downloadURL, { debugJavascript: true }, (error, stream) => {
+                      if (error) {
+                        console.log(error);
+                        return error;
+                      }
+                      const outputPDF = fs.createWriteStream(id + '.pdf');
+                      stream.pipe(outputPDF);
+                      outputPDF.on('finish', function() {
+
+                        xvfb.stop(function(err) {
+                          resolve({ fileName: fileName, outputPath: outputPDF.path });
+                          // the Xvfb is stopped
+                        });
+                        // fs.unlink(response.outputPath);  //to delete
+                      }).on('error', function(err) {
+                        console.log(err);
+
+                        xvfb.stop(function(err) {
+                          reject(err);
+                          // the Xvfb is stopped
+                        });
+                      });
                     });
                   });
                 } catch (exception) {
                   console.log(exception);
-                  reject(exception);
+                  xvfb.stop(function(err) {
+                    reject(exception);
+                    // the Xvfb is stopped
+                  });
                 }
               });
 

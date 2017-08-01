@@ -38,6 +38,7 @@
     "swig-email-templates": "^3.0.0",
     "winston": "^2.3.0",
     "wkhtmltopdf": "^0.3.4",
-    "xml2js": "^0.4.17"
+    "xml2js": "^0.4.17",
+    "xvfb": "^0.2.3"
   }
 }

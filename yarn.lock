@@ -1619,6 +1619,10 @@ multer@^1.1.0:
     type-is "^1.6.4"
     xtend "^4.0.0"
 
+nan@>=2.0.0:
+  version "2.6.2"
+  resolved "https://registry.yarnpkg.com/nan/-/nan-2.6.2.tgz#e4ff34e6c95fdfb5aecc08de6596f43605a7db45"
+
 negotiator@0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.1.tgz#2b327184e8992101177b28563fb5e7102acd0ca9"
@@ -2151,6 +2155,12 @@ slang@>=0.2:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/slang/-/slang-0.3.0.tgz#13af75b4f0c018c6a8193d704f65b23be4fbabdc"
 
+sleep@3.0.x:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/sleep/-/sleep-3.0.1.tgz#be4d17c579360e07e04ed8172ba2b10a69054df3"
+  dependencies:
+    nan ">=2.0.0"
+
 slick@1.12.2:
   version "1.12.2"
   resolved "https://registry.yarnpkg.com/slick/-/slick-1.12.2.tgz#bd048ddb74de7d1ca6915faa4a57570b3550c2d7"
@@ -2668,6 +2678,12 @@ xtend@~2.1.1:
   resolved "https://registry.yarnpkg.com/xtend/-/xtend-2.1.2.tgz#6efecc2a4dad8e6962c4901b337ce7ba87b5d28b"
   dependencies:
     object-keys "~0.4.0"
+
+xvfb@^0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/xvfb/-/xvfb-0.2.3.tgz#5588a968754593913f33c0c0e2cbb73741235832"
+  optionalDependencies:
+    sleep "3.0.x"
 
 y18n@^3.2.0:
   version "3.2.1"

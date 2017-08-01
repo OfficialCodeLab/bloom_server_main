@@ -90,7 +90,7 @@ console.log("Requiring BLOOM modules...");
 
 // TODO: Require all your bloom modules here, and init if necessary.
 let databaseMonitor = require("./components/modules/databaseMonitor");
-databaseMonitor.init(admin, templates, transporter, mailgun, mailcomposer, moment, rek);
+databaseMonitor.init(admin, templates, transporter, mailgun, mailcomposer, rek);
 
 console.log("...done!");
 

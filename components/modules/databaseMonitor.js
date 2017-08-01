@@ -7,9 +7,11 @@
 
 function init(admin, templates, transporter, mailgun, mailcomposer, rek) {
 
-    var moment = rek('moment');
-
     console.log("Loading DATABASE MONITOR module...");
+
+    var moment = rek('moment');
+    var wkhtmltopdf = rek('wkhtmltopdf');
+    var fs = rek('fs');
 
     /*======================================================================*\
         If the child of a user changes, run this code.
@@ -315,8 +317,6 @@ function init(admin, templates, transporter, mailgun, mailcomposer, rek) {
 
             Promise.all(promiseArr).then((guests) => {
 
-              var wkhtmltopdf = rek('wkhtmltopdf');
-              var fs = rek('fs');
               var failed = [];
               var successCount = 0; //Check this + failed to match length and mail user
               var failCount = 0;

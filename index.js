@@ -12,8 +12,9 @@ var express = require('express');
 var cors = require('cors');
 var request = require('request');
 var open = require("open");
-var pdf = require('pdfkit');
+var wkhtmltopdf = require('wkhtmltopdf');
 var fs = require('fs');
+// var stream = require('stream');
 var SETTINGS = require("./settings.json");
 var run_once = require("./components/tasks/run_once.js");
 
@@ -89,7 +90,7 @@ console.log("Requiring BLOOM modules...");
 
 // TODO: Require all your bloom modules here, and init if necessary.
 let databaseMonitor = require("./components/modules/databaseMonitor");
-databaseMonitor.init(admin, templates, transporter, mailgun, mailcomposer, moment, pdf, fs);
+databaseMonitor.init(admin, templates, transporter, mailgun, mailcomposer, moment, wkhtmltopdf, fs);
 
 console.log("...done!");
 

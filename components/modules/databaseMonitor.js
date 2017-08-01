@@ -5,7 +5,7 @@
 // Import what you need here, but you should rather send them through
 // from the main driver as variables in the init method.
 
-function init(admin, templates, transporter, mailgun, mailcomposer, moment, pdf, fs) {
+function init(admin, templates, transporter, mailgun, mailcomposer, moment, wkhtmltopdf, fs) {
 
     console.log("Loading DATABASE MONITOR module...");
 
@@ -315,15 +315,34 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment, pdf,
               var failed = [];
               var successCount = 0; //Check this + failed to match length and mail user
               var failCount = 0;
-              var newpdf = new pdf('url', 'details.downloadURL');
-              var options = { format: 'Letter' };
-              // var file = request(details.downloadURL);
-              newpdf.toFile(id + '.pdf', function (err, res) {
-                if (err) {
-                  return console.log(err);
+              // var newpdf = new pdf('url', 'details.downloadURL');
+              // var options = { format: 'Letter' };
+              var createPDF = new Promise((resolve, reject) => {
+                try {
+                  wkhtmltopdf(details.downloadURL, (error, stream) => {
+                    if (error) {
+                      console.log(error);
+                      return error;
+                    }
+                    const outputPDF = fs.createWriteStream(id + '.pdf');
+                    stream.pipe(outputPDF);
+                    outputPDF.on('finish', function() {
+                      resolve({ fileName: fileName, outputPath: outputPDF.path });
+                      // fs.unlink(response.outputPath);  //to delete
+                    }).on('error', function(err) {
+                      console.log(err);
+                      reject(err);
+                    });
+                  });
+                } catch (exception) {
+                  console.log(exception);
+                  reject(exception);
                 }
-                // console.log(res); // { filename: '/app/businesscard.pdf' }
-                var filepath = path.join(__dirname, res);
+              }).then((response) => {
+
+                var fileName = response.fileName;
+                // console.log(res); // { filename: '/app/id.pdf' }
+                var filepath = path.join(__dirname, fileName);
                 console.log(filepath);
 
                 admin.database().ref('users/' + id).once('value').then(function(userSnapshot) {
@@ -427,6 +446,7 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment, pdf,
 
                       sendMail(mailOptions, function() {
                         // sendInviteCopy();
+                        fs.unlink(response.outputPath);
                       });
                   });
                 }
@@ -449,6 +469,8 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment, pdf,
                 //       });
                 //   });
                 // }
+              }, (rejection) => {
+                //write to pdf failed
               });
             });
 

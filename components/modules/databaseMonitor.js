@@ -12,6 +12,7 @@ function init(admin, templates, transporter, mailgun, mailcomposer, rek) {
     var moment = rek('moment');
     var wkhtmltopdf = rek('wkhtmltopdf');
     var Xvfb = rek('xvfb');
+    var path = rek('path');
 
     var fs = rek('fs');
 

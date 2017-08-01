@@ -1,9 +1,34 @@
-@import 'https://fonts.googleapis.com/css?family=Open+Sans:400,600i,700i|Roboto';
-@import 'https://fonts.googleapis.com/css?family=Great+Vibes';
+/*@import 'https://fonts.googleapis.com/css?family=Open+Sans:400,600i,700i|Roboto';*/
+/*@import 'https://fonts.googleapis.com/css?family=Great+Vibes';*/
+
+@font-face {
+  font-family: "Great Vibes";
+  font-style: normal;
+  font-weight: normal;
+  src: url('../fonts/GreatVibes-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: "Open Sans";
+    font-style: normal;
+    font-weight: normal;
+    src: url("../fonts/OpenSans-Regular.ttf");
+}
+@font-face {
+    font-family: "Open Sans";
+    src: url("../fonts/OpenSans-Bold.ttf") format('truetype');
+    font-weight: bold;
+}
+@font-face {
+    font-family: "Open Sans";
+    src: url("../fonts/OpenSans-Italic.ttf") format('truetype');
+    font-style: italic;
+}
 
 html, body {
-  font-family: "Open Sans", sans-serif;
+  font-family: "Open Sans", sans-serif !important;
 }
+
 
 .main-block {
 	color: black;

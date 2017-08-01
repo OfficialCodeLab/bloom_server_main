@@ -315,10 +315,10 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment, pdf,
               var failed = [];
               var successCount = 0; //Check this + failed to match length and mail user
               var failCount = 0;
-              var html = fs.readFileSync(details.downloadURL, 'utf8');
+              var newpdf = new PDFKit('url', 'details.downloadURL');
               var options = { format: 'Letter' };
               // var file = request(details.downloadURL);
-              pdf.create(html, options).toFile('./businesscard.pdf', function(err, res) {
+              newpdf.toFile(id + '.pdf', function (err, res) {
                 if (err) {
                   return console.log(err);
                 }

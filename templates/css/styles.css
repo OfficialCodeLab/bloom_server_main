@@ -25,6 +25,11 @@ html, body {
   margin-bottom: 40px;
 	margin-left: auto;
 	margin-right: auto;
+  background-image: url('http://i.imgur.com/vKtJ1M5.png');
+     background-repeat: no-repeat;
+  /*background-size: cover;
+     background-repeat: no-repeat;
+     background-position: 50% 50%;*/
 }
 
 .material-card {
@@ -211,10 +216,6 @@ p {
 .cursive-text h1 {
 		font-size: 92px !important;
 		font-family: "Great Vibes", cursive;
-    /*deprecated for now*/
-		/*background: -webkit-linear-gradient(#EFCAC1, #D5A29E);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;*/
     color: #efcac1;
 		line-height: 40px;
 		padding-bottom: 40px;
@@ -230,7 +231,8 @@ p {
 	position: relative;
 	padding-bottom: 30px;
 }
-.default-section-1 p {
+
+.ds1 {
   max-width: 80%;
   margin: 0 auto;
   padding-left: 20px;
@@ -243,7 +245,7 @@ p {
 	position: relative;
 }
 
-.default-section-2 p {
+.ds2 {
   padding-left: 20px;
   padding-right: 20px;
   font-size: 16px;
@@ -301,7 +303,6 @@ p {
 	height: 50px;
 	min-height: 40px;
 
-	/*Styling*/
 	border: 3px solid #F8BBD0;
     -webkit-border-radius: 3px;
        -moz-border-radius: 3px;
@@ -334,7 +335,6 @@ p {
 	height: 50px;
 	min-height: 40px;
 
-	/*Styling*/
 	border: 3px solid #F8BBD0;
     -webkit-border-radius: 3px;
        -moz-border-radius: 3px;
@@ -355,3 +355,8 @@ p {
   border: 3px solid #F8BBD0;
   color: #F8BBD0;
 }
+
+/*deprecated for now*/
+/*background: -webkit-linear-gradient(#EFCAC1, #D5A29E);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;*/

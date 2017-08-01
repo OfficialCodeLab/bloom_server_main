@@ -323,7 +323,7 @@ function init(admin, templates, transporter, mailgun, mailcomposer, rek) {
               // var options = { format: 'Letter' };
               var createPDF = new Promise((resolve, reject) => {
                 try {
-                  wkhtmltopdf(details.downloadURL, (error, stream) => {
+                  wkhtmltopdf(details.downloadURL, { debugJavascript: true }, (error, stream) => {
                     if (error) {
                       console.log(error);
                       return error;

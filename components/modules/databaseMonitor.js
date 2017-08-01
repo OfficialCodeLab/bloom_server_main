@@ -323,6 +323,7 @@ function init(admin, templates, transporter, mailgun, mailcomposer, rek) {
               // var options = { format: 'Letter' };
               var createPDF = new Promise((resolve, reject) => {
                 try {
+
                   wkhtmltopdf(details.downloadURL, { debugJavascript: true }, (error, stream) => {
                     if (error) {
                       console.log(error);
@@ -341,10 +342,10 @@ function init(admin, templates, transporter, mailgun, mailcomposer, rek) {
                 } catch (exception) {
                   console.log(exception);
                   reject(exception);
-
+                }
               });
 
-              createPDF.then((response) => {
+              createPFT.then((response) => {
 
                 var fileName = response.fileName;
                 // console.log(res); // { filename: '/app/id.pdf' }

@@ -41,6 +41,17 @@ html, body {
 	margin-right: auto;
 }
 
+.main-block-new {
+	color: black;
+  background-color: white;
+	text-align: center;
+  margin-top: 40px;
+	margin-bottom: 40px;
+	max-width:600px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
 .main-block-2 {
 	color: black;
   background-color: white;
@@ -105,7 +116,7 @@ html, body {
 
 .grey-footer {
 	background-color: #BCBDBF;
-	padding: 20px 10px 40px 10px;
+	padding: 20px 15px 40px 15px;
 	color: #796F70;
 	text-align: center;
 }

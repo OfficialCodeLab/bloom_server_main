@@ -350,7 +350,7 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment) {
                     to: _details.to, // list of receivers
                     subject: "Bloom - You have been invited to a wedding!" // Subject line
                 };
-                templates.render('weddingInvite1.html', _details, function(err, html, text) {
+                templates.render('weddingInviteNotify.html', _details, function(err, html, text) {
                     mailOptions.html = html;
                     mailOptions.text = text;
 
@@ -421,7 +421,7 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment) {
               // Send mail to user with invite for missed invites
               function sendInviteCopy () {
                 details.name = "!";
-                templates.render('weddingInvite1.html', details, function(err, html, text) {
+                templates.render('weddingInviteNotify.html', details, function(err, html, text) {
                     var mailOptions = {
                         from: "noreply@bloomweddings.co.za", // sender address
                         replyTo: "noreply@bloomweddings.co.za", //Reply to address

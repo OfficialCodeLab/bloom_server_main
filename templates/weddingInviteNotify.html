@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+	{% block head %}
+	<link rel="stylesheet" href="css/styles.css">
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	{% endblock %}
+</head>
+<body class="main-body">
+	<div class="main-block-new material-card">
+
+		<img src="http://i.imgur.com/5KzeqVP.jpg" style="height: auto; width: 100%">
+		<div class="text-center default-main-body">
+				<h1>Hi{{name}}</h1>
+				<hr />
+				<p>
+					Good news! {{name1}} &amp; {{name2}} have invited you have invited to a wedding!!
+				</p>
+				<br /><h4><strong>
+					Basic Details:
+				</strong></h4><br />
+				<p>
+					{{date}}
+				</p>
+				<p>
+					{{addressL1}}
+				</p>
+				<p>
+					{{addressL2}}
+				</p><br />
+				<p>
+					{{contact}}
+				</p><hr />
+				<h4>
+					Please see the invite attached in this email.
+				</h4>
+				<!-- <img src="http://i.imgur.com/gTnVI81.png" style="padding-top: 50px; max-width: 100%; height: auto; width: 300px;"> -->
+				<div class="cascading-buttons" style="padding-top: 30px; padding-bottom: 40px;">
+					<a href="{{acceptUrl}}"><button class="default-accept-btn">I Accept</button></a>
+					<a href="{{declineUrl}}"><button class="default-decline-btn">I Decline</button></a>
+				</div>
+			</div>
+
+		<div class="grey-footer">
+			You have received this email because you have been added to a guest list on Bloom. You will not likely receive further mails. To unsubscribe from all emails from Bloom, <a href="#">click here</a>, or click here to <a href="#">update your email preferences.</a>.<br><br>&copy;
+			2017 Bloom. All Rights Reserved.
+		</div>
+	</div>
+</body>
+
+</html>

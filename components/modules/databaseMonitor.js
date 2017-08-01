@@ -5,7 +5,7 @@
 // Import what you need here, but you should rather send them through
 // from the main driver as variables in the init method.
 
-function init(admin, templates, transporter, mailgun, mailcomposer, moment) {
+function init(admin, templates, transporter, mailgun, mailcomposer, moment, request) {
 
     console.log("Loading DATABASE MONITOR module...");
 
@@ -315,6 +315,8 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment) {
               var failed = [];
               var successCount = 0; //Check this + failed to match length and mail user
               var failCount = 0;
+              var file = request(details.downloadURL);
+              
               admin.database().ref('users/' + id).once('value').then(function(userSnapshot) {
                 var user = userSnapshot.val();
                 name = user.name;
@@ -409,11 +411,12 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment) {
                         to: email, // list of receivers
                         subject: "Bloom - Your wedding invites report", // Subject line
                         html: html, // html body
-                        text: text //Text equivalent
+                        text: text, //Text equivalent
+                        attachment: file
                     };
 
                     sendMail(mailOptions, function() {
-                      sendInviteCopy();
+                      // sendInviteCopy();
                     });
                 });
               }
@@ -428,7 +431,8 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment) {
                         to: email, // list of receivers
                         subject: "Bloom - You have been invited to a wedding!", // Subject line
                         html: html, // html body
-                        text: text //Text equivalent
+                        text: text, //Text equivalent
+                        attachment: file
                     };
 
                     sendMail(mailOptions, function() {

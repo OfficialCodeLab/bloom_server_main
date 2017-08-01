@@ -315,7 +315,7 @@ function init(admin, templates, transporter, mailgun, mailcomposer, moment, pdf,
               var failed = [];
               var successCount = 0; //Check this + failed to match length and mail user
               var failCount = 0;
-              var newpdf = new PDFKit('url', 'details.downloadURL');
+              var newpdf = new pdf('url', 'details.downloadURL');
               var options = { format: 'Letter' };
               // var file = request(details.downloadURL);
               newpdf.toFile(id + '.pdf', function (err, res) {

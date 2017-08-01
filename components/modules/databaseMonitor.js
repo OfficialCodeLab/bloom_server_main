@@ -7,8 +7,6 @@
 
 function init(admin, templates, transporter, mailgun, mailcomposer, rek) {
 
-    var wkhtmltopdf = rek('wkhtmltopdf');
-    var fs = rek('fs');
     var moment = rek('moment');
 
     console.log("Loading DATABASE MONITOR module...");
@@ -316,6 +314,9 @@ function init(admin, templates, transporter, mailgun, mailcomposer, rek) {
             }
 
             Promise.all(promiseArr).then((guests) => {
+
+              var wkhtmltopdf = rek('wkhtmltopdf');
+              var fs = rek('fs');
               var failed = [];
               var successCount = 0; //Check this + failed to match length and mail user
               var failCount = 0;
@@ -345,7 +346,7 @@ function init(admin, templates, transporter, mailgun, mailcomposer, rek) {
                 }
               });
 
-              createPFT.then((response) => {
+              createPDF.then((response) => {
 
                 var fileName = response.fileName;
                 // console.log(res); // { filename: '/app/id.pdf' }

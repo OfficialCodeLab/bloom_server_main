@@ -7,61 +7,63 @@
 	<link rel="stylesheet" href="css/bootstrap.min.css">
 	{% endblock %}
 </head>
-<div class="main-block material-card">
-	<div class="text-center default-main-body">
-		<div class="default-name">
-			<h1>Hi{{name}}</h1>
-		</div><br />
-		<div class="default-section-1">
-			<div class="default-foreground">
-				<div class="cursive-text">
-					<h1>{{name1}}</h1>
-					<h1>&amp;</h1>
-					<h1>{{name2}}</h1></div>
-				<p>{{subheading}}</p>
-			</div>
-			<div class="default-background">
-				<img src="http://i.imgur.com/aHUjNHm.jpg" style="
-				  max-width: 30%;
-				  height: auto;
-				  position: absolute;
-				  left: 0%;
-				  bottom: 0%;">
-			</div>
-		</div>
-		<div class="default-section-2">
-			<div class="default-foreground">
-				<img src="http://i.imgur.com/6KmcwnQ.jpg" style="width: 262px; height: 14px;"><br>
-				<p style="padding-top: 20px;">{{date}}</p>
-
-				<p style="font-size: 20px; font-weight: 600; padding-top: 20px;">{{addressL1}}</p>
-				<p>{{addressL2}}</p>
-				<p style="padding-top: 30px;">{{info1}}</p>
-				<p>{{info2}}</p>
-				<p>{{info3}}</p>
-				<p style="padding-top: 50px;">{{contact}}</p>
-				<img src="http://i.imgur.com/xWIRwHe.jpg" style="width: 262px; height: 14px;"><br><br>
-				<div class="cascading-buttons">
-					<a href="{{acceptUrl}}"><button class="default-accept-btn">I Accept</button></a>
-					<a href="{{declineUrl}}"><button class="default-decline-btn">I Decline</button></a>
+<body class="main-body">
+	<div class="main-block-2 material-card">
+		<div class="text-center default-main-body">
+			<div class="default-name">
+				<h1>Hi{{name}}</h1>
+			</div><br />
+			<div class="default-section-1">
+				<div class="default-foreground">
+					<div class="cursive-text">
+						<h1>{{name1}}</h1>
+						<h1>&amp;</h1>
+						<h1>{{name2}}</h1></div>
+					<p>{{subheading}}</p>
 				</div>
-				<img src="http://i.imgur.com/gTnVI81.png" style="padding-top: 50px; max-width: 100%; height: auto; width: 300px;">
+				<div class="default-background">
+					<img src="http://i.imgur.com/XIlqGpq.png" style="
+					  max-width: 30%;
+					  height: auto;
+					  position: absolute;
+					  left: 0%;
+					  bottom: 0%;">
+				</div>
 			</div>
-			<div class="default-background-r">
-				<img src="http://i.imgur.com/PXpjLJa.jpg" style="
-				  max-width: 30%;
-				  height: auto;
-				  position: absolute;
-				  right: 0%;
-				  bottom: 50%;">
+			<div class="default-section-2">
+				<div class="default-foreground">
+					<img src="http://i.imgur.com/6KmcwnQ.jpg" style="width: 262px; height: 14px;"><br>
+					<p style="padding-top: 20px;">{{date}}</p>
+
+					<p style="font-size: 20px; font-weight: 600; padding-top: 20px;">{{addressL1}}</p>
+					<p>{{addressL2}}</p>
+					<p style="padding-top: 30px;">{{info1}}</p>
+					<p>{{info2}}</p>
+					<p>{{info3}}</p>
+					<p style="padding-top: 50px;">{{contact}}</p>
+					<img src="http://i.imgur.com/xWIRwHe.jpg" style="width: 262px; height: 14px;"><br><br>
+					<div class="cascading-buttons">
+						<a href="{{acceptUrl}}"><button class="default-accept-btn">I Accept</button></a>
+						<a href="{{declineUrl}}"><button class="default-decline-btn">I Decline</button></a>
+					</div>
+					<img src="http://i.imgur.com/gTnVI81.png" style="padding-top: 50px; max-width: 100%; height: auto; width: 300px;">
+				</div>
+				<div class="default-background-r">
+					<img src="http://i.imgur.com/PXpjLJa.jpg" style="
+					  max-width: 30%;
+					  height: auto;
+					  position: absolute;
+					  right: 0%;
+					  bottom: 50%;">
+				</div>
 			</div>
 		</div>
-	</div>
 
-	<div class="grey-footer">
-		You have received this email because you have been added to a guest list on Bloom. You will not likely receive further mails. To unsubscribe from all emails from Bloom, <a href="#">click here</a>, or click here to <a href="#">update your email preferences.</a>.<br><br>&copy;
-		2017 Bloom. All Rights Reserved.
+		<div class="grey-footer">
+			You have received this email because you have been added to a guest list on Bloom. You will not likely receive further mails. To unsubscribe from all emails from Bloom, <a href="#">click here</a>, or click here to <a href="#">update your email preferences.</a>.<br><br>&copy;
+			2017 Bloom. All Rights Reserved.
+		</div>
 	</div>
-</div>
+</body>
 
 </html>

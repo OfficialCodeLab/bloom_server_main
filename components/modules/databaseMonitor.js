@@ -5,7 +5,11 @@
 // Import what you need here, but you should rather send them through
 // from the main driver as variables in the init method.
 
-function init(admin, templates, transporter, mailgun, mailcomposer, moment, wkhtmltopdf, fs) {
+function init(admin, templates, transporter, mailgun, mailcomposer, rekuire) {
+
+    var wkhtmltopdf = rek('wkhtmltopdf');
+    var fs = rek('fs');
+    var moment = rek('moment');
 
     console.log("Loading DATABASE MONITOR module...");
 

@@ -5,7 +5,7 @@
 // Import what you need here, but you should rather send them through
 // from the main driver as variables in the init method.
 
-function init(admin, templates, transporter, mailgun, mailcomposer, rekuire) {
+function init(admin, templates, transporter, mailgun, mailcomposer, rek) {
 
     var wkhtmltopdf = rek('wkhtmltopdf');
     var fs = rek('fs');

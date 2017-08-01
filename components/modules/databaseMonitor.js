@@ -322,22 +322,26 @@ function init(admin, templates, transporter, mailgun, mailcomposer, rek) {
               // var newpdf = new pdf('url', 'details.downloadURL');
               // var options = { format: 'Letter' };
               var createPDF = new Promise((resolve, reject) => {
-
-                wkhtmltopdf(details.downloadURL, { debugJavascript: true }, (error, stream) => {
-                  if (error) {
-                    console.log(error);
-                    return error;
-                  }
-                  const outputPDF = fs.createWriteStream(id + '.pdf');
-                  stream.pipe(outputPDF);
-                  outputPDF.on('finish', function() {
-                    resolve({ fileName: fileName, outputPath: outputPDF.path });
-                    // fs.unlink(response.outputPath);  //to delete
-                  }).on('error', function(err) {
-                    console.log(err);
-                    reject(err);
+                try {
+                  wkhtmltopdf(details.downloadURL, { debugJavascript: true }, (error, stream) => {
+                    if (error) {
+                      console.log(error);
+                      return error;
+                    }
+                    const outputPDF = fs.createWriteStream(id + '.pdf');
+                    stream.pipe(outputPDF);
+                    outputPDF.on('finish', function() {
+                      resolve({ fileName: fileName, outputPath: outputPDF.path });
+                      // fs.unlink(response.outputPath);  //to delete
+                    }).on('error', function(err) {
+                      console.log(err);
+                      reject(err);
+                    });
                   });
-                });
+                } catch (exception) {
+                  console.log(exception);
+                  reject(exception);
+
               });
 
               createPDF.then((response) => {

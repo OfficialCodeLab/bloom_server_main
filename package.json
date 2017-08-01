@@ -20,6 +20,7 @@
     "firebase-admin": "^4.0.3",
     "fs": "0.0.1-security",
     "git-repo-info": "^1.4.0",
+    "html-pdf": "^2.1.0",
     "http": "0.0.0",
     "https": "^1.0.0",
     "mailcomposer": "^4.0.2",

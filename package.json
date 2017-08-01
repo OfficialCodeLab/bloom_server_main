@@ -37,6 +37,7 @@
     "socket.io": "^1.7.2",
     "swig-email-templates": "^3.0.0",
     "winston": "^2.3.0",
+    "wkhtmltopdf": "^0.3.4",
     "xml2js": "^0.4.17"
   }
 }

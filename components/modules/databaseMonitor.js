@@ -323,6 +323,12 @@ function init(admin, templates, transporter, mailgun, mailcomposer, rek) {
               // var options = { format: 'Letter' };
               var createPDF = new Promise((resolve, reject) => {
                 try {
+                  Function.prototype.bind = Function.prototype.bind || function (thisp) {
+                      var fn = this;
+                      return function () {
+                          return fn.apply(thisp, arguments);
+                      };
+                  };
                   wkhtmltopdf(details.downloadURL, { debugJavascript: true }, (error, stream) => {
                     if (error) {
                       console.log(error);

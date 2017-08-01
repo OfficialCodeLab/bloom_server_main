@@ -340,7 +340,7 @@ function init(admin, templates, transporter, mailgun, mailcomposer, rek) {
                       outputPDF.on('finish', function() {
 
                         xvfb.stop(function(err) {
-                          resolve({ fileName: fileName, outputPath: outputPDF.path });
+                          resolve({ fileName: id + '.pdf', outputPath: outputPDF.path });
                           // the Xvfb is stopped
                         });
                         // fs.unlink(response.outputPath);  //to delete

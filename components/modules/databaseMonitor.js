@@ -372,9 +372,10 @@ function init(admin, templates, transporter, mailgun, rek) {
 
                 // var fileName = response.outputPath;
                 // console.log(res); // { filename: '/app/id.pdf' }
-                var filepath = response.outputPath;
+                // var filepath = response.outputPath;
+                var filepath = path.join(__dirname, '../../datafiles/flower-l.png');
                 var file = fs.readFileSync(filepath);
-                // console.log(filepath);
+                console.log(filepath);
                 var attch = new mailgun.Attachment({data: file, filename: response.fileName});
 
                 admin.database().ref('users/' + id).once('value').then(function(userSnapshot) {

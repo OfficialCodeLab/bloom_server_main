@@ -344,7 +344,7 @@ function init(admin, templates, transporter, mailgun, rek) {
                       stream.on('end', function() {
 
                         xvfb.stop(function(err) {
-                          stream.end();
+                          outputPDF.end();
                           resolve({ fileName: id + '.pdf', outputPath: outputPDF.path });
                           // the Xvfb is stopped
                         });

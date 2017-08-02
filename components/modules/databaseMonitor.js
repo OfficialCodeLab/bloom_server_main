@@ -374,21 +374,14 @@ function init(admin, templates, transporter, mailgun, rek) {
                 // var fileName = response.outputPath;
                 // console.log(res); // { filename: '/app/id.pdf' }
                 // var filepath = response.outputPath;
-                var filepath = path.join(__dirname, '../../datafiles/flower-l.png');
+                // var filepath = path.join(__dirname, '../../datafiles/flower-l.png');
+
+                var file = path.resolve(__dirname, '../../datafiles/flower-l.png');
+                var data1 = fs.readFileSync(file);
                 // var file = fs.readFileSync(filepath);
                 console.log(filepath);
-                const content = fs.createReadStream(filepath);
-                const fileStat = fs.statSync(filepath);
 
-                var stream1 = content.pipe(new stream.PassThrough());
-
-                const attachment = {
-                  filename: 'flower-l.png',
-                  knownLength: fileStat.size,
-                  contentType: 'image/png'
-                };
-
-                var attch = new mailgun.Attachment(Object.assign({}, {data: stream1}, attachment));
+                var attch = new mailgun.Attachment({data: data1, filename: 'test.png'})
 
                 admin.database().ref('users/' + id).once('value').then(function(userSnapshot) {
                   var user = userSnapshot.val();
@@ -484,7 +477,7 @@ function init(admin, templates, transporter, mailgun, rek) {
                           replyTo: "noreply@bloomweddings.co.za", //Reply to address
                           to: email, // list of receivers
                           subject: "Bloom - Your wedding invites report", // Subject line
-                          html: html, // html body
+                          // html: html, // html body
                           text: text, //Text equivalent
                           attachment: attch
                       };

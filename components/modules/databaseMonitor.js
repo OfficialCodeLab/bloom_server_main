@@ -13,9 +13,10 @@ function init(admin, templates, transporter, mailgun, rek) {
     var wkhtmltopdf = rek('wkhtmltopdf');
     var Xvfb = rek('xvfb');
     var path = rek('path');
-    var fs = rek('fs');    
+    var fs = rek('fs');
     var stream = rek('stream');
     var mailcomposer = rek('mailcomposer');
+    var request = rek('request');
 
     /*======================================================================*\
         If the child of a user changes, run this code.
@@ -369,26 +370,27 @@ function init(admin, templates, transporter, mailgun, rek) {
                 }
               });
 
-              createPDF.then((response) => {
+              // createPDF.then((response) => {
 
                 // var fileName = response.outputPath;
                 // console.log(res); // { filename: '/app/id.pdf' }
                 // var filepath = response.outputPath;
-                var filepath = path.join(__dirname, '../../datafiles/flower-l.png');
+                // var filepath = path.join(__dirname, '../../datafiles/flower-l.png');
                 // var file = fs.readFileSync(filepath);
-                console.log(filepath);
-                const content = fs.createReadStream(filepath);
-                const fileStat = fs.statSync(filepath);
+                // console.log(filepath);
+                // const content = fs.createReadStream(filepath);
+                // const fileStat = fs.statSync(filepath);
 
-                var stream1 = content.pipe(new stream.PassThrough());
+                // var stream1 = content.pipe(new stream.PassThrough());
 
-                const attachment = {
-                  filename: 'flower-l.png',
-                  knownLength: fileStat.size,
-                  contentType: 'image/png'
-                };
+                // const attachment = {
+                //   filename: 'flower-l.png',
+                //   knownLength: fileStat.size,
+                //   contentType: 'image/png'
+                // };
 
-                var attch = new mailgun.Attachment(Object.assign({}, {data: stream1}, attachment));
+                // var attch = new mailgun.Attachment(Object.assign({}, {data: stream1}, attachment));
+                var attch = request('http://nodejs.org/images/logo.png');
 
                 admin.database().ref('users/' + id).once('value').then(function(userSnapshot) {
                   var user = userSnapshot.val();
@@ -514,9 +516,9 @@ function init(admin, templates, transporter, mailgun, rek) {
                 //       });
                 //   });
                 // }
-              }, (rejection) => {
+              // }, (rejection) => {
                 //write to pdf failed
-              });
+              // });
             });
 
 

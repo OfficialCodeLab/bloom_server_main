@@ -336,7 +336,7 @@ function init(admin, templates, transporter, mailgun, rek) {
                         console.log(error);
                         return error;
                       }
-                      const outputPDF = fs.createWriteStream('../../datafiles/tmp/' + id + '.pdf');
+                      const outputPDF = fs.createWriteStream('../../datafiles/' + id + '.pdf');
                       stream.pipe(outputPDF);
                       stream.on('end', function() {
 

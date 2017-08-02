@@ -368,7 +368,7 @@ function init(admin, templates, transporter, mailgun, rek) {
 
                 var fileName = response.fileName;
                 // console.log(res); // { filename: '/app/id.pdf' }
-                var filepath = path.join(__dirname, fileName);
+                var filepath = response.outputPath;
                 console.log(filepath);
 
                 admin.database().ref('users/' + id).once('value').then(function(userSnapshot) {

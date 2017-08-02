@@ -384,6 +384,7 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
                   });
               } else {
                 createPDF.then((response)=>{
+                  attachText = "Please see your invite attached"
                   generateInvites();
                 });
               }
@@ -484,7 +485,8 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
                   var reportDetails = {
                     name: name,
                     emailsCount: successCount,
-                    emailsFailed: failedEmailsStr
+                    emailsFailed: failedEmailsStr,
+                    attach: attachText
                   };
 
                   templates.render('weddingInviteReport.html', reportDetails, function(err, html, text) {

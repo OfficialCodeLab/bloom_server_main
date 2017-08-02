@@ -430,7 +430,7 @@ function init(admin, templates, transporter, mailgun, rek) {
                       mailOptions.text = text;
                       mailOptions.attachment = attch;
 
-                      sendMail(mailOptions, function() {
+                      sendMailManual(mailOptions, function() {
                         successCount++;
                       });
                   });
@@ -489,7 +489,7 @@ function init(admin, templates, transporter, mailgun, rek) {
                           attachment: attch
                       };
 
-                      sendMail(mailOptions, function() {
+                      sendMailManual(mailOptions, function() {
                         // sendInviteCopy();
                         // fs.unlink(response.outputPath);
                       });
@@ -699,6 +699,32 @@ function init(admin, templates, transporter, mailgun, rek) {
         console.log("Message sent to Mailgun: " + body.message);
         callback();
       });
+    }
+
+    function sendMailManual (mailOptions, callback) {
+      if(mailOptions.to) {
+        if(validateEmail(mailOptions.to)){
+
+              var data = {
+                from: mailOptions.from,
+                to: mailOptions.to,
+                replyTo: mailOptions.replyTo, //Reply to address
+                subject: mailOptions.subject,
+                html: mailOptions.html
+                text: mailOptions.text,
+                attachment: mailOptions.attachment
+              };
+
+              mailgun.messages().send(data, function (error, body) {
+                console.log("Message sent to Mailgun: " + body.message);
+                callback();
+              });
+        } else {
+          console.log("Message blocked, invalid email address: " + mailOptions.to);
+        }
+      } else {
+        console.log("Message blocked, no email address");
+      }
     }
 
     function validateEmail(email) {

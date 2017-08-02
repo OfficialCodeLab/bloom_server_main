@@ -484,8 +484,8 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
                   //if any failed emails, create string from joining array
                   var failedEmailsStr = "";
                   if(failed.length > 0) {
-                    failedEmailsStr = failed.join('<br>');
-                    failedEmailsStr += "<br>Please contact support with this list."
+                    failedEmailsStr = failed.join('\n');
+                    failedEmailsStr += "\nPlease contact support with this list."
                   } else {
                     failedEmailsStr = "All invites were successfully sent.";
                   }

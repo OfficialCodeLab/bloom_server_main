@@ -659,13 +659,14 @@ function init(admin, templates, transporter, mailgun, rek) {
                     message: message.toString('ascii')
                 };
 
-                mailgun.messages().send(dataToSend, function(sendError, body) {
+                mailgun.messages().sendMail(dataToSend, function(sendError, body) {
                     if (sendError) {
                         console.log(sendError);
                         return;
                     } else {
                         console.log("Message sent to Mailgun: " + body.message);
                         if(mailOptions.attachment) {
+                          console.log("Attachment found");
                           sendMailJustAttachment(mailOptions, function () {
                             callback();
                           });
@@ -689,8 +690,8 @@ function init(admin, templates, transporter, mailgun, rek) {
       var data = {
         from: mailOptions.from,
         to: mailOptions.to,
-        subject: mailOptions.subject,
-        text: mailOptions.text,
+        subject: "You have an attachment from Bloom",
+        text: "Please find your attachment in this email",
         attachment: mailOptions.attachment
       };
 

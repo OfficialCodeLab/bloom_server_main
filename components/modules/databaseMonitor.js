@@ -659,7 +659,7 @@ function init(admin, templates, transporter, mailgun, rek) {
                     message: message.toString('ascii')
                 };
 
-                mailgun.messages().sendMail(dataToSend, function(sendError, body) {
+                mailgun.messages().sendMime(dataToSend, function(sendError, body) {
                     if (sendError) {
                         console.log(sendError);
                         return;

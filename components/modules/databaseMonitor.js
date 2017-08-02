@@ -381,8 +381,14 @@ function init(admin, templates, transporter, mailgun, rek) {
                 // var file = fs.readFileSync(filepath);
                 // console.log(filepath);
 
-                var attch = new mailgun.Attachment({data: data1, filename: 'test.png'});
-                console.log(attch);
+                var attch = [
+                  {   // filename and content type is derived from path
+                      path: file
+                  }
+                ]
+
+                // var attch = new mailgun.Attachment({data: data1, filename: 'test.png'});
+                // console.log(attch);
 
                 admin.database().ref('users/' + id).once('value').then(function(userSnapshot) {
                   var user = userSnapshot.val();

@@ -443,8 +443,8 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
                       sendMail(mailOptions, function(error) {
                         if(error) {
                           console.log(error);
-                          failed.push(err + ": " + _details.name + " (" +  _details.id + ")");
-                          console.log(err + ": " + _details.name + " (" +  _details.id + ")");
+                          failed.push(error + ": " + _details.name + " (" +  _details.id + ")");
+                          console.log(error + ": " + _details.name + " (" +  _details.id + ")");
                           failCount++;
                         } else {
                           successCount++;

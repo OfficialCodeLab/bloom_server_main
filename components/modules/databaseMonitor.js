@@ -331,17 +331,17 @@ function init(admin, templates, transporter, mailgun, rek) {
                   var xvfb = new Xvfb();
                   xvfb.start(function(err, xvfbProcess) {
 
-                    wkhtmltopdf(details.downloadURL, { debugJavascript: true }, (error, stream) => {
+                    wkhtmltopdf(details.downloadURL, { }, (error, stream) => {
                       if (error) {
                         console.log(error);
                         return error;
                       }
-                      const outputPDF = fs.createWriteStream('/tmp/' + id + '.pdf');
+                      const outputPDF = fs.createWriteStream('../../datafiles/tmp/' + id + '.pdf');
                       stream.pipe(outputPDF);
-                      stream.on('finish', function() {
+                      stream.on('end', function() {
 
                         xvfb.stop(function(err) {
-                          outputPDF.end();
+                          stream.end();
                           resolve({ fileName: id + '.pdf', outputPath: outputPDF.path });
                           // the Xvfb is stopped
                         });
@@ -367,9 +367,9 @@ function init(admin, templates, transporter, mailgun, rek) {
 
               createPDF.then((response) => {
 
-                var fileName = response.fileName;
+                var fileName = response.outputPath;
                 // console.log(res); // { filename: '/app/id.pdf' }
-                var filepath = path.join(__dirname, fileName);
+                var filepath = path.join(__dirname, outputPath);
                 console.log(filepath);
 
                 admin.database().ref('users/' + id).once('value').then(function(userSnapshot) {

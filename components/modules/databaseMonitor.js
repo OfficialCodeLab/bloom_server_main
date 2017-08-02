@@ -337,7 +337,7 @@ function init(admin, templates, transporter, mailgun, rek) {
                         return error;
                       }
 
-                      var filepath = path.join(__dirname, .'./../datafiles/' + id + '.pdf');
+                      var filepath = path.join(__dirname, '../../datafiles/' + id + '.pdf');
                       console.log(filepath);
                       const outputPDF = fs.createWriteStream(filepath);
                       stream.pipe(outputPDF);

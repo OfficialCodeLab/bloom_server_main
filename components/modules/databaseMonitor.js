@@ -409,7 +409,7 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
                     // do something with each guests[i]
 
                     // Regex check email -> If fail, add to error list
-                    if (validateEmail(email)) { //valid
+                    // if (validateEmail(guests[i].email)) { //valid
 
                         // merge data
                         var detailsCopy = details;
@@ -420,11 +420,11 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
 
                         renderInvite(JSON.parse(JSON.stringify(detailsCopy)));
 
-                    } else { //invalid
-                      failCount++;
-                      console.log("GUEST FAILED");
-                      failed.pushObject(guests[i].name + " (" + guests[i].email + ") does not have a valid email address.");
-                    }
+                    // } else { //invalid
+                    //   failCount++;
+                    //   console.log("GUEST FAILED");
+                    //   failed.pushObject(guests[i].name + " (" + guests[i].email + ") does not have a valid email address.");
+                    // }
                   }
                 });
 
@@ -442,7 +442,9 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
 
                       sendMail(mailOptions, function(error) {
                         if(error) {
-                          failed.push(err + ": " + _details.name + " (" +  _details.id + ")")
+                          console.log(error);
+                          failed.push(err + ": " + _details.name + " (" +  _details.id + ")");
+                          console.log(err + ": " + _details.name + " (" +  _details.id + ")");
                           failCount++;
                         } else {
                           successCount++;

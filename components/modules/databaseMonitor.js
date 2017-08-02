@@ -389,9 +389,6 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
                 });
               }
 
-
-
-
               function generateInvites () {
                 var attch;
                 details.attach = attachText;
@@ -408,23 +405,14 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
                   for (var i = 0; i < guests.length; i++) {
                     // do something with each guests[i]
 
-                    // Regex check email -> If fail, add to error list
-                    // if (validateEmail(guests[i].email)) { //valid
+                    // merge data
+                    var detailsCopy = details;
+                    Object.assign(detailsCopy, guests[i]);
+                    detailsCopy.to = guests[i].email;
+                    detailsCopy.id = userSnapshot.key;
+                    // console.log(JSON.stringify(detailsCopy));
 
-                        // merge data
-                        var detailsCopy = details;
-                        Object.assign(detailsCopy, guests[i]);
-                        detailsCopy.to = guests[i].email;
-                        detailsCopy.id = userSnapshot.key;
-                        // console.log(JSON.stringify(detailsCopy));
-
-                        renderInvite(JSON.parse(JSON.stringify(detailsCopy)));
-
-                    // } else { //invalid
-                    //   failCount++;
-                    //   console.log("GUEST FAILED");
-                    //   failed.pushObject(guests[i].name + " (" + guests[i].email + ") does not have a valid email address.");
-                    // }
+                    renderInvite(JSON.parse(JSON.stringify(detailsCopy)));
                   }
                 });
 
@@ -711,7 +699,7 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
               var data = {
                 from: mailOptions.from,
                 to: mailOptions.to,
-                replyTo: mailOptions.replyTo, //Reply to address
+                replyTo: mailOptions.replyTo,
                 subject: mailOptions.subject,
                 html: mailOptions.html,
                 text: mailOptions.text,

@@ -388,10 +388,11 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
                 });
               }
 
-              
+
 
 
               function generateInvites () {
+                var attch;
 
                 // var file = path.resolve(__dirname, '../../datafiles/flower-l.png');
                 // var data1 = fs.readFileSync(file);
@@ -652,7 +653,8 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
         }
     });
 
-    function sendMail (mailOptions, callback) {
+    /* DEPRECATED */
+    /*function sendMail (mailOptions, callback) {
         var mail = mailcomposer(mailOptions);
 
         if(mailOptions.to) {
@@ -689,9 +691,10 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
           console.log("Message blocked, no email address");
         }
 
-    }
+    } */
 
     /* DEPRECATED */
+    /*
     function sendMailJustAttachment (mailOptions, callback) {
       var data = {
         from: mailOptions.from,
@@ -705,7 +708,7 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
         console.log("Message sent to Mailgun: " + body.message);
         callback();
       });
-    }
+    } */
 
     function sendMail (mailOptions, callback) {
       if(mailOptions.to) {

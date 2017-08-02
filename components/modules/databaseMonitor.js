@@ -337,11 +337,11 @@ function init(admin, templates, transporter, mailgun, rek) {
                         return error;
                       }
 
-                      xvfb.stop(function(err) {
-                        resolve(stream);
-                      });
+                      // xvfb.stop(function(err) {
+                      // });
 
-                      var filepath = path.join(__dirname, '../../datafiles/' + id + '.pdf');
+                      resolve(stream);
+                      /*var filepath = path.join(__dirname, '../../datafiles/' + id + '.pdf');
                       console.log(filepath);
                       const outputPDF = fs.createWriteStream(filepath);
                       stream.pipe(outputPDF);
@@ -360,7 +360,7 @@ function init(admin, templates, transporter, mailgun, rek) {
                           reject(err);
                           // the Xvfb is stopped
                         });
-                      });
+                      });*/
                     });
                   });
                 } catch (exception) {

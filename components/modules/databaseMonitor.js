@@ -414,8 +414,8 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
                         // merge data
                         var detailsCopy = details;
                         Object.assign(detailsCopy, guests[i]);
-                        detailsCopy.name = ", " + detailsCopy.name + "!";
                         detailsCopy.to = guests[i].email;
+                        detailsCopy.id = userSnapshot.key;
                         // console.log(JSON.stringify(detailsCopy));
 
                         renderInvite(JSON.parse(JSON.stringify(detailsCopy)));
@@ -440,8 +440,13 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
                       mailOptions.text = text;
                       mailOptions.attachment = attch;
 
-                      sendMail(mailOptions, function() {
-                        successCount++;
+                      sendMail(mailOptions, function(error) {
+                        if(error) {
+                          failed.push(err + ": " + _details.name + " (" +  _details.id + ")")
+                          failCount++;
+                        } else {
+                          successCount++;
+                        }
                       });
                   });
                 }
@@ -478,6 +483,7 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
                   var failedEmailsStr = "";
                   if(failed.length > 0) {
                     failedEmailsStr = failed.join('<br>');
+                    failedEmailsStr += "<br>Please contact support with this list."
                   } else {
                     failedEmailsStr = "All invites were successfully sent.";
                   }
@@ -501,30 +507,13 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
                       };
 
                       sendMail(mailOptions, function() {
-                        // sendInviteCopy();
+                        admin.database().ref('guestLists/' + snapshot.key).update({
+                            completed: true
+                        });
                         // fs.unlink(response.outputPath);
                       });
                   });
                 }
-
-                // Send mail to user with invite for missed invites
-                // function sendInviteCopy () {
-                //   details.name = "!";
-                //   templates.render('weddingInviteNotify.html', details, function(err, html, text) {
-                //       var mailOptions = {
-                //           from: "noreply@bloomweddings.co.za", // sender address
-                //           replyTo: "noreply@bloomweddings.co.za", //Reply to address
-                //           to: email, // list of receivers
-                //           subject: "Bloom - You have been invited to a wedding!", // Subject line
-                //           html: html, // html body
-                //           text: text, //Text equivalent
-                //           attachment: file
-                //       };
-                //
-                //       sendMail(mailOptions, function() {
-                //       });
-                //   });
-                // }
               }
             });
 
@@ -732,10 +721,14 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
                 callback();
               });
         } else {
-          console.log("Message blocked, invalid email address: " + mailOptions.to);
+          var err = "invalid email address: " + mailOptions.to;
+          console.log("Message blocked, " + err);
+          callback(err);
         }
       } else {
-        console.log("Message blocked, no email address");
+        var err = "no email address";
+        console.log("Message blocked, " + err);
+        callback(err);
       }
     }
 

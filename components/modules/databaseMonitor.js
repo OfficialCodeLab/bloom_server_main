@@ -442,9 +442,7 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
 
                       sendMail(mailOptions, function(error) {
                         if(error) {
-                          console.log(error);
-                          failed.push(error + ": " + _details.name + " (" +  _details.id + ")");
-                          console.log(error + ": " + _details.name + " (" +  _details.id + ")");
+                          failed.push(_details.id);
                           failCount++;
                         } else {
                           successCount++;
@@ -483,9 +481,10 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
                   console.log("Wedding invites sent out successfully. Sending report mail");
                   //if any failed emails, create string from joining array
                   var failedEmailsStr = "";
+                  var emailsFSub = "";
                   if(failed.length > 0) {
-                    failedEmailsStr = failed.join('<br>');
-                    failedEmailsStr += "<br>Please contact support with this list."
+                    failedEmailsStr = failed.join(', ');
+                    emailsFSub = "Please contact support with this list."
                   } else {
                     failedEmailsStr = "All invites were successfully sent.";
                   }
@@ -494,6 +493,7 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
                     name: name,
                     emailsCount: successCount,
                     emailsFailed: failedEmailsStr,
+                    emailsFSub: emailsFSub,
                     attach: attachText
                   };
 
@@ -724,7 +724,7 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
               });
         } else {
           var err = "Invalid email address: " + mailOptions.to;
-          console.log("Message blocked,. " + err);
+          console.log("Message blocked. " + err);
           callback(err);
         }
       } else {

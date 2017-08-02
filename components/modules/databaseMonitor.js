@@ -382,10 +382,11 @@ function init(admin, templates, transporter, mailgun, rek) {
                 // console.log(filepath);
 
                 var attch = [
-                  {   // filename and content type is derived from path
-                      path: file
+                  {   // use URL as an attachment
+                      filename: 'license.txt',
+                      path: 'https://raw.github.com/andris9/Nodemailer/master/LICENSE'
                   }
-                ]
+                ];
 
                 // var attch = new mailgun.Attachment({data: data1, filename: 'test.png'});
                 // console.log(attch);
@@ -484,7 +485,7 @@ function init(admin, templates, transporter, mailgun, rek) {
                           replyTo: "noreply@bloomweddings.co.za", //Reply to address
                           to: email, // list of receivers
                           subject: "Bloom - Your wedding invites report", // Subject line
-                          // html: html, // html body
+                          html: html, // html body
                           text: text, //Text equivalent
                           attachment: attch
                       };

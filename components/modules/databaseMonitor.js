@@ -5,7 +5,7 @@
 // Import what you need here, but you should rather send them through
 // from the main driver as variables in the init method.
 
-function init(admin, templates, transporter, mailgun, rek) {
+function init(admin, templates, transporter, mailgun, rek, googl) {
 
     console.log("Loading DATABASE MONITOR module...");
 
@@ -327,68 +327,75 @@ function init(admin, templates, transporter, mailgun, rek) {
               // var newpdf = new pdf('url', 'details.downloadURL');
               // var options = { format: 'Letter' };
               var createPDF = new Promise((resolve, reject) => {
-                try {
-                  var Xvfb = require('xvfb');
-                  var xvfb = new Xvfb();
-                  xvfb.start(function(err, xvfbProcess) {
-
-                    wkhtmltopdf(details.downloadURL, { }, (error, stream) => {
-                      if (error) {
-                        console.log(error);
-                        return error;
-                      }
-
-                      var filepath = path.join(__dirname, '../../datafiles/' + id + '.pdf');
-                      console.log(filepath);
-                      const outputPDF = fs.createWriteStream(filepath);
-                      stream.pipe(outputPDF);
-                      stream.on('end', function() {
-
-                        xvfb.stop(function(err) {
-                          outputPDF.end();
-                          resolve({ fileName: id + '.pdf', outputPath: outputPDF.path });
-                          // the Xvfb is stopped
-                        });
-                        // fs.unlink(response.outputPath);  //to delete
-                      }).on('error', function(err) {
-                        console.log(err);
-
-                        xvfb.stop(function(err) {
-                          reject(err);
-                          // the Xvfb is stopped
-                        });
-                      });
-                    });
-                  });
-                } catch (exception) {
-                  console.log(exception);
-                  xvfb.stop(function(err) {
-                    reject(exception);
-                    // the Xvfb is stopped
-                  });
-                }
+                // try {
+                //   var Xvfb = require('xvfb');
+                //   var xvfb = new Xvfb();
+                //   xvfb.start(function(err, xvfbProcess) {
+                //
+                //     wkhtmltopdf(details.downloadURL, { }, (error, stream) => {
+                //       if (error) {
+                //         console.log(error);
+                //         return error;
+                //       }
+                //
+                //       var filepath = path.join(__dirname, '../../datafiles/' + id + '.pdf');
+                //       console.log(filepath);
+                //       const outputPDF = fs.createWriteStream(filepath);
+                //       stream.pipe(outputPDF);
+                //       stream.on('end', function() {
+                //
+                //         xvfb.stop(function(err) {
+                //           outputPDF.end();
+                //           resolve({ fileName: id + '.pdf', outputPath: outputPDF.path });
+                //           // the Xvfb is stopped
+                //         });
+                //         // fs.unlink(response.outputPath);  //to delete
+                //       }).on('error', function(err) {
+                //         console.log(err);
+                //
+                //         xvfb.stop(function(err) {
+                //           reject(err);
+                //           // the Xvfb is stopped
+                //         });
+                //       });
+                //     });
+                //   });
+                // } catch (exception) {
+                //   console.log(exception);
+                //   xvfb.stop(function(err) {
+                //     reject(exception);
+                //     // the Xvfb is stopped
+                //   });
+                // }
               });
 
-              createPDF.then((response) => {
+              var attachText = "";
 
-                // var fileName = response.outputPath;
-                // console.log(res); // { filename: '/app/id.pdf' }
-                // var filepath = response.outputPath;
-                // var filepath = path.join(__dirname, '../../datafiles/flower-l.png');
+              if(details.downloadURL) {
+                googl.shorten(details.downloadURL)
+                  .then(function (shortUrl) {
+                      attachText = "Please view your invite here: " + shortUrl;
+                      generateInvites();
+                  })
+                  .catch(function (err) {
+                      console.error(err.message);
+                      attachText = "Please view your invite here: " + details.downloadURL;
+                      generateInvites();
+                  });
+              } else {
+                createPDF.then((response)=>{
+                  generateInvites();
+                });
+              }
 
-                var file = path.resolve(__dirname, '../../datafiles/flower-l.png');
-                var data1 = fs.readFileSync(file);
-                // var file = fs.readFileSync(filepath);
-                // console.log(filepath);
-                // var attch = [
-                //   {   // use URL as an attachment
-                //       filename: 'license.txt',
-                //       path: 'https://raw.github.com/andris9/Nodemailer/master/LICENSE'
-                //   }
-                // ];
+              
 
-                var attch = new mailgun.Attachment({data: data1, filename: 'test.png'});
-                // console.log(attch);
+
+              function generateInvites () {
+
+                // var file = path.resolve(__dirname, '../../datafiles/flower-l.png');
+                // var data1 = fs.readFileSync(file);
+                // var attch = new mailgun.Attachment({data: data1, filename: 'test.png'});
 
                 admin.database().ref('users/' + id).once('value').then(function(userSnapshot) {
                   var user = userSnapshot.val();
@@ -514,9 +521,7 @@ function init(admin, templates, transporter, mailgun, rek) {
                 //       });
                 //   });
                 // }
-              }, (rejection) => {
-                //write to pdf failed
-              });
+              }
             });
 
 
@@ -686,6 +691,7 @@ function init(admin, templates, transporter, mailgun, rek) {
 
     }
 
+    /* DEPRECATED */
     function sendMailJustAttachment (mailOptions, callback) {
       var data = {
         from: mailOptions.from,
@@ -701,7 +707,7 @@ function init(admin, templates, transporter, mailgun, rek) {
       });
     }
 
-    function sendMailManual (mailOptions, callback) {
+    function sendMail (mailOptions, callback) {
       if(mailOptions.to) {
         if(validateEmail(mailOptions.to)){
 

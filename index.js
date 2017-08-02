@@ -34,6 +34,8 @@ var nodemailer = require('nodemailer');
 var admin = require("firebase-admin");
 var rek = require('rekuire');
 var moment = require('moment');
+var googl = require('goo.gl');
+var apiCredentials = rek('credentials/api-credentials.json');
 // var schedule = require('node-schedule');
 var templates = new EmailTemplates({
   root: path.join(__dirname, "templates")
@@ -54,6 +56,8 @@ var transporter = nodemailer.createTransport({
         pass: mailLogin.pass
     }
 });
+
+googl.setKey(apiCredentials.googl);
 
 /*======================================================================*\
     Mailgun credentials
@@ -90,7 +94,7 @@ console.log("Requiring BLOOM modules...");
 
 // TODO: Require all your bloom modules here, and init if necessary.
 let databaseMonitor = require("./components/modules/databaseMonitor");
-databaseMonitor.init(admin, templates, transporter, mailgun, rek);
+databaseMonitor.init(admin, templates, transporter, mailgun, rek, googl);
 
 console.log("...done!");
 

@@ -438,7 +438,7 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
                       mailOptions.text = text;
                       mailOptions.attachment = attch;
 
-                      sendMailManual(mailOptions, function() {
+                      sendMail(mailOptions, function() {
                         successCount++;
                       });
                   });
@@ -497,7 +497,7 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
                           attachment: attch
                       };
 
-                      sendMailManual(mailOptions, function() {
+                      sendMail(mailOptions, function() {
                         // sendInviteCopy();
                         // fs.unlink(response.outputPath);
                       });

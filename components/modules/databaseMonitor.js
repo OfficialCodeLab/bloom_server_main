@@ -710,7 +710,7 @@ function init(admin, templates, transporter, mailgun, rek) {
                 to: mailOptions.to,
                 replyTo: mailOptions.replyTo, //Reply to address
                 subject: mailOptions.subject,
-                html: mailOptions.html
+                html: mailOptions.html,
                 text: mailOptions.text,
                 attachment: mailOptions.attachment
               };

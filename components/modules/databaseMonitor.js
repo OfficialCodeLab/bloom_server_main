@@ -657,7 +657,8 @@ function init(admin, templates, transporter, mailgun, rek) {
 
                 var dataToSend = {
                     to: mailOptions.to,
-                    message: message.toString('ascii')
+                    message: message.toString('ascii'),
+                    attachment: mailOptions.attachment
                 };
 
                 mailgun.messages().sendMime(dataToSend, function(sendError, body) {

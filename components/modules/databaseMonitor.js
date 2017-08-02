@@ -380,15 +380,14 @@ function init(admin, templates, transporter, mailgun, rek) {
                 var data1 = fs.readFileSync(file);
                 // var file = fs.readFileSync(filepath);
                 // console.log(filepath);
+                // var attch = [
+                //   {   // use URL as an attachment
+                //       filename: 'license.txt',
+                //       path: 'https://raw.github.com/andris9/Nodemailer/master/LICENSE'
+                //   }
+                // ];
 
-                var attch = [
-                  {   // use URL as an attachment
-                      filename: 'license.txt',
-                      path: 'https://raw.github.com/andris9/Nodemailer/master/LICENSE'
-                  }
-                ];
-
-                // var attch = new mailgun.Attachment({data: data1, filename: 'test.png'});
+                var attch = new mailgun.Attachment({data: data1, filename: 'test.png'});
                 // console.log(attch);
 
                 admin.database().ref('users/' + id).once('value').then(function(userSnapshot) {
@@ -657,18 +656,24 @@ function init(admin, templates, transporter, mailgun, rek) {
 
                 var dataToSend = {
                     to: mailOptions.to,
-                    message: message.toString('ascii'),
-                    attachment: mailOptions.attachment
+                    message: message.toString('ascii')
                 };
 
-                mailgun.messages().sendMime(dataToSend, function(sendError, body) {
+                mailgun.messages().send(dataToSend, function(sendError, body) {
                     if (sendError) {
                         console.log(sendError);
                         return;
                     } else {
                         console.log("Message sent to Mailgun: " + body.message);
-                        callback();
+                        if(mailOptions.attachment) {
+                          sendMailJustAttachment(mailOptions, function () {
+                            callback();
+                          });
+                        } else {
+                          callback();
+                        }
                     }
+
                 });
             });
           } else {
@@ -678,6 +683,21 @@ function init(admin, templates, transporter, mailgun, rek) {
           console.log("Message blocked, no email address");
         }
 
+    }
+
+    function sendMailJustAttachment (mailOptions, callback) {
+      var data = {
+        from: mailOptions.from,
+        to: mailOptions.to,
+        subject: mailOptions.subject,
+        text: mailOptions.text,
+        attachment: mailOptions.attachment
+      };
+
+      mailgun.messages().send(data, function (error, body) {
+        console.log("Message sent to Mailgun: " + body.message);
+        callback();
+      });
     }
 
     function validateEmail(email) {

@@ -337,6 +337,10 @@ function init(admin, templates, transporter, mailgun, rek) {
                         return error;
                       }
 
+                      xvfb.stop(function(err) {
+                        resolve(stream);
+                      });
+
                       var filepath = path.join(__dirname, '../../datafiles/' + id + '.pdf');
                       console.log(filepath);
                       const outputPDF = fs.createWriteStream(filepath);
@@ -372,8 +376,8 @@ function init(admin, templates, transporter, mailgun, rek) {
 
                 // var fileName = response.outputPath;
                 // console.log(res); // { filename: '/app/id.pdf' }
-                var filepath = response.outputPath;
-                console.log(filepath);
+                // var filepath = response.outputPath;
+                // console.log(filepath);
 
                 admin.database().ref('users/' + id).once('value').then(function(userSnapshot) {
                   var user = userSnapshot.val();
@@ -413,7 +417,7 @@ function init(admin, templates, transporter, mailgun, rek) {
                   templates.render('weddingInviteNotify.html', _details, function(err, html, text) {
                       mailOptions.html = html;
                       mailOptions.text = text;
-                      mailOptions.attachment = filepath;
+                      mailOptions.attachment = response;
 
                       sendMail(mailOptions, function() {
                         successCount++;
@@ -471,7 +475,7 @@ function init(admin, templates, transporter, mailgun, rek) {
                           subject: "Bloom - Your wedding invites report", // Subject line
                           html: html, // html body
                           text: text, //Text equivalent
-                          attachment: filepath
+                          attachment: response
                       };
 
                       sendMail(mailOptions, function() {

@@ -379,7 +379,7 @@ function init(admin, templates, transporter, mailgun, rek) {
                 var file = path.resolve(__dirname, '../../datafiles/flower-l.png');
                 var data1 = fs.readFileSync(file);
                 // var file = fs.readFileSync(filepath);
-                console.log(filepath);
+                // console.log(filepath);
 
                 var attch = new mailgun.Attachment({data: data1, filename: 'test.png'})
 

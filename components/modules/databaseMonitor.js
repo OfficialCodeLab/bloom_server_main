@@ -336,7 +336,10 @@ function init(admin, templates, transporter, mailgun, rek) {
                         console.log(error);
                         return error;
                       }
-                      const outputPDF = fs.createWriteStream('../../datafiles/' + id + '.pdf');
+
+                      var filepath = path.join(__dirname, .'./../datafiles/' + id + '.pdf');
+                      console.log(filepath);
+                      const outputPDF = fs.createWriteStream(filepath);
                       stream.pipe(outputPDF);
                       stream.on('end', function() {
 
@@ -367,9 +370,9 @@ function init(admin, templates, transporter, mailgun, rek) {
 
               createPDF.then((response) => {
 
-                var fileName = response.outputPath;
+                // var fileName = response.outputPath;
                 // console.log(res); // { filename: '/app/id.pdf' }
-                var filepath = path.join(__dirname, outputPath);
+                var filepath = response.outputPath;
                 console.log(filepath);
 
                 admin.database().ref('users/' + id).once('value').then(function(userSnapshot) {

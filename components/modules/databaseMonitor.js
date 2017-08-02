@@ -374,9 +374,20 @@ function init(admin, templates, transporter, mailgun, rek) {
                 // console.log(res); // { filename: '/app/id.pdf' }
                 // var filepath = response.outputPath;
                 var filepath = path.join(__dirname, '../../datafiles/flower-l.png');
-                var file = fs.readFileSync(filepath);
+                // var file = fs.readFileSync(filepath);
                 console.log(filepath);
-                var attch = new mailgun.Attachment({data: file, filename: 'flower-l.png'});
+                const content = fs.createReadStream(filepath);
+                const fileStat = fs.statSync(filepath);
+
+                var stream1 = content.pipe(new stream.PassThrough());
+
+                const attachment = {
+                  filename: 'flower-l.png',
+                  knownLength: fileStat.size,
+                  contentType: 'image/png'
+                };
+
+                var attch = new mailgun.Attachment(Object.assign({}, {data: stream1}, attachment));
 
                 admin.database().ref('users/' + id).once('value').then(function(userSnapshot) {
                   var user = userSnapshot.val();

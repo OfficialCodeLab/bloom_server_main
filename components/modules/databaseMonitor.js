@@ -13,7 +13,8 @@ function init(admin, templates, transporter, mailgun, rek) {
     var wkhtmltopdf = rek('wkhtmltopdf');
     var Xvfb = rek('xvfb');
     var path = rek('path');
-    var fs = rek('fs');
+    var fs = rek('fs');    
+    var stream = rek('stream');
     var mailcomposer = rek('mailcomposer');
 
     /*======================================================================*\

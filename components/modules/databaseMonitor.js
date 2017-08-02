@@ -5,7 +5,7 @@
 // Import what you need here, but you should rather send them through
 // from the main driver as variables in the init method.
 
-function init(admin, templates, transporter, mailgun, mailcomposer, rek) {
+function init(admin, templates, transporter, mailgun, rek) {
 
     console.log("Loading DATABASE MONITOR module...");
 
@@ -13,8 +13,8 @@ function init(admin, templates, transporter, mailgun, mailcomposer, rek) {
     var wkhtmltopdf = rek('wkhtmltopdf');
     var Xvfb = rek('xvfb');
     var path = rek('path');
-
     var fs = rek('fs');
+    var mailcomposer = rek('mailcomposer');
 
     /*======================================================================*\
         If the child of a user changes, run this code.
@@ -472,7 +472,7 @@ function init(admin, templates, transporter, mailgun, mailcomposer, rek) {
 
                       sendMail(mailOptions, function() {
                         // sendInviteCopy();
-                        fs.unlink(response.outputPath);
+                        // fs.unlink(response.outputPath);
                       });
                   });
                 }

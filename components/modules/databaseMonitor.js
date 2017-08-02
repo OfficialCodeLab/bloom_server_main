@@ -393,6 +393,7 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
 
               function generateInvites () {
                 var attch;
+                details.attach = attachText;
 
                 // var file = path.resolve(__dirname, '../../datafiles/flower-l.png');
                 // var data1 = fs.readFileSync(file);

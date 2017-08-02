@@ -376,7 +376,7 @@ function init(admin, templates, transporter, mailgun, rek) {
                 var filepath = path.join(__dirname, '../../datafiles/flower-l.png');
                 var file = fs.readFileSync(filepath);
                 console.log(filepath);
-                var attch = new mailgun.Attachment({data: file, filename: response.fileName});
+                var attch = new mailgun.Attachment({data: file, filename: 'flower-l.png'});
 
                 admin.database().ref('users/' + id).once('value').then(function(userSnapshot) {
                   var user = userSnapshot.val();

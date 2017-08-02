@@ -336,11 +336,12 @@ function init(admin, templates, transporter, mailgun, rek) {
                         console.log(error);
                         return error;
                       }
-                      const outputPDF = fs.createWriteStream(id + '.pdf');
+                      const outputPDF = fs.createWriteStream('/tmp/' + id + '.pdf');
                       stream.pipe(outputPDF);
-                      outputPDF.on('finish', function() {
+                      stream.on('finish', function() {
 
                         xvfb.stop(function(err) {
+                          outputPDF.end();
                           resolve({ fileName: id + '.pdf', outputPath: outputPDF.path });
                           // the Xvfb is stopped
                         });
@@ -368,7 +369,7 @@ function init(admin, templates, transporter, mailgun, rek) {
 
                 var fileName = response.fileName;
                 // console.log(res); // { filename: '/app/id.pdf' }
-                var filepath = response.outputPath;
+                var filepath = path.join(__dirname, fileName);
                 console.log(filepath);
 
                 admin.database().ref('users/' + id).once('value').then(function(userSnapshot) {

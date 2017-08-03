@@ -16,6 +16,7 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
     var fs = rek('fs');
     var stream = rek('stream');
     var pdf = rek('html-pdf');
+    var handlebars = rek('handlebars');
     var mailcomposer = rek('mailcomposer');
 
     /*======================================================================*\
@@ -573,17 +574,20 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
               // var newpdf = new pdf('url', 'details.downloadURL');
               // var options = { format: 'Letter' };
               var createPDF = new Promise((resolve, reject) => {
-
-                templates.render('saveDateDefault.html', details, function(err, html, text) {
-                  var options = { };
+                var src = path.join(__dirname, '../../templates/saveDateDefault.hbs');
+                var source = fs.readFileSync(src, 'utf8');
+                var template = handlebars.compile(source);
+                var html = template(data);
+                // templates.render('saveDateDefault.html', details, function(err, html, text) {
+                  // var options = { };
                   var filepath = path.join(__dirname, '../../datafiles/' + id + '.pdf');
-                  pdf.create(html, options).toFile(filepath, function(err, res) {
+                  pdf.create(html).toFile(filepath, function(err, res) {
                     if (err) {
                       return reject(err);
                     }
                     resolve(res); // { filename: '/app/businesscard.pdf' }
                   });
-                });
+                // });
               });
 
               var attachText = "";

@@ -3,23 +3,57 @@
 
 <head>
 	{% block head %}
-	<link rel="stylesheet" href="css/save-date.css">
+	<link rel="stylesheet" href="css/styles.css">
 	<link rel="stylesheet" href="css/bootstrap.min.css">
 	{% endblock %}
 </head>
-<div class="text-center default-sd-main-body">
-	<img class="default-sd-border" src='images/emails/parts/Border.png'/>
-	<div class="default-sd-content">
-		<img class="default-sd-heading" src='images/emails/parts/Heading.png' />
-		<h2>{{name1}} &amp; {{name2}}</h2>
-		<h3>{{date}}</h3>
-		<p>
-			{{addressL1}}
-		<br><br />
-			{{info1}}
-		</p>
-	</div>
+<body class="main-body">
+	<div class="main-block-2 material-card">
+		<div class="text-center default-main-body">
+			<div class="default-name">
+				<h1>Hi{{name}}</h1>
+			</div><br />
+			<div class="default-section-1">
+				<div class="default-foreground">
+					<div class="cursive-text">
+						<h1 style="font-family: 'Vivaldi';">{{name1}}</h1>
+						<h1 style="font-family: 'Vivaldi';">&amp;</h1>
+						<h1 style="font-family: 'Vivaldi';">{{name2}}</h1></div>
+					<p class="ds1">{{subheading}}</p>
+				</div>
+				<!-- <div class="default-background">
+					<img src="http://i.imgur.com/XIlqGpq.png" class="dbl">
+				</div> -->
+			</div>
+			<div class="default-section-2">
+				<div class="default-foreground">
+					<img src="http://i.imgur.com/OtwpNou.png"><br>
+					<p class="ds2" style="padding-top: 20px;">{{date}}</p>
 
-</div>
+					<p class="ds2" style="font-size: 20px; font-weight: 600; padding-top: 20px;">{{addressL1}}</p>
+					<p class="ds2">{{addressL2}}</p>
+					<p class="ds2" style="padding-top: 30px;">{{info1}}</p>
+					<p class="ds2">{{info2}}</p>
+					<p class="ds2">{{info3}}</p>
+					<p class="ds2" style="padding-top: 50px;">{{contact}}</p>
+					<img src="http://i.imgur.com/YRP82cl.png"><br><br>
+					<div class="cascading-buttons">
+						<a href="{{acceptUrl}}"><button class="default-accept-btn">I Accept</button></a>
+						<a href="{{declineUrl}}"><button class="default-decline-btn">I Decline</button></a>
+					</div>
+					<img src="http://i.imgur.com/gTnVI81.png" style="padding-top: 50px; max-width: 100%; height: auto; width: 300px;">
+				</div>
+				<!-- <div class="default-background-r">
+					<img src="http://i.imgur.com/PXpjLJa.jpg" class="dbr">
+				</div> -->
+			</div>
+		</div>
+
+		<div class="grey-footer">
+			You have received this email because you have been added to a guest list on Bloom. You will not likely receive further mails. To unsubscribe from all emails from Bloom, <a href="#">click here</a>, or click here to <a href="#">update your email preferences.</a>.<br><br>&copy;
+			2017 Bloom. All Rights Reserved.
+		</div>
+	</div>
+</body>
 
 </html>

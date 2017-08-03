@@ -1,11 +1,6 @@
 
 @import 'https://fonts.googleapis.com/css?family=Tangerine';
-@import url('https://fonts.googleapis.com/css?family=Rufina');
-
-@font-face {
-  font-family: beaurencourt;
-  src: url('fonts/BeaurencourtFY-Light_S.otf');
-}
+@import 'https://fonts.googleapis.com/css?family=Rufina';
 
 .text-center {
   text-align: center;

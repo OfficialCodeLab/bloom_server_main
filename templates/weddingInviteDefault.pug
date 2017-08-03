@@ -1,0 +1,28 @@
+html
+  head
+    style
+      include css/wedding-invite.css
+  body(class="main-body")
+    div(class="main-block-2 material-card")
+      div(class="text-center default-main-body")
+        div(class="default-section-1")
+          div(class="default-foreground")
+            div(class="cursive-text")
+              h1 #{name1} &amp; #{name2}
+            p #{subheading}
+
+        div(class="default-section-2")
+          div(class="default-foreground")
+            img(src='http://i.imgur.com/OtwpNou.png')
+            br
+            p(style='padding-top: 20px;') #{date}
+            p(style='font-size: 20px; font-weight: 600; padding-top: 20px;') #{addressL1}
+            p #{addressL2}
+            p(style='padding-top: 30px;') #{info1}
+            p #{info2}
+            p #{info3}
+            p(style='padding-top: 5px;') #{contact}
+            img(src='http://i.imgur.com/YRP82cl.png')
+            br
+            br
+            img(src='http://i.imgur.com/gTnVI81.png', style='padding-top: 50px; max-width: 100%; height: auto; width: 300px;')

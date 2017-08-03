@@ -329,46 +329,18 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
               // var newpdf = new pdf('url', 'details.downloadURL');
               // var options = { format: 'Letter' };
               var createPDF = new Promise((resolve, reject) => {
-                // try {
-                //   var Xvfb = require('xvfb');
-                //   var xvfb = new Xvfb();
-                //   xvfb.start(function(err, xvfbProcess) {
-                //
-                //     wkhtmltopdf(details.downloadURL, { }, (error, stream) => {
-                //       if (error) {
-                //         console.log(error);
-                //         return error;
-                //       }
-                //
-                //       var filepath = path.join(__dirname, '../../datafiles/' + id + '.pdf');
-                //       console.log(filepath);
-                //       const outputPDF = fs.createWriteStream(filepath);
-                //       stream.pipe(outputPDF);
-                //       stream.on('end', function() {
-                //
-                //         xvfb.stop(function(err) {
-                //           outputPDF.end();
-                //           resolve({ fileName: id + '.pdf', outputPath: outputPDF.path });
-                //           // the Xvfb is stopped
-                //         });
-                //         // fs.unlink(response.outputPath);  //to delete
-                //       }).on('error', function(err) {
-                //         console.log(err);
-                //
-                //         xvfb.stop(function(err) {
-                //           reject(err);
-                //           // the Xvfb is stopped
-                //         });
-                //       });
-                //     });
-                //   });
-                // } catch (exception) {
-                //   console.log(exception);
-                //   xvfb.stop(function(err) {
-                //     reject(exception);
-                //     // the Xvfb is stopped
-                //   });
-                // }
+                var src = path.join(__dirname, "../../templates/weddingInviteDefault.pug");
+                template = pug.compileFile(src, {
+                    debug: false,
+                    pretty: true
+                });
+                var filepath = path.join(__dirname, '../../datafiles/' + id + 'wi.pdf');
+                pdf.create(template(details)).toFile(filepath, function(err, res) {
+                  if (err) {
+                    return reject(err);
+                  }
+                  resolve(res); // { filename: 'name.pdf' }
+                });
               });
 
               var attachText = "";
@@ -386,18 +358,21 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
                   });
               } else {
                 createPDF.then((response)=>{
-                  attachText = "Please see your invite attached"
-                  generateInvites();
+                  attachText = "Please see your invite attached";
+                  console.log("PDF generated successfully");
+                  generateInvites(response.filename);
                 });
               }
 
-              function generateInvites () {
+              function generateInvites (filepath) {
                 var attch;
+                var attachment;
                 details.attach = attachText;
 
-                // var file = path.resolve(__dirname, '../../datafiles/flower-l.png');
-                // var data1 = fs.readFileSync(file);
-                // var attch = new mailgun.Attachment({data: data1, filename: 'test.png'});
+                if(filepath) {
+                  var data1 = fs.readFileSync(filepath);
+                  attachment = new mailgun.Attachment({data: data1, filename: 'wedding-invite.pdf'});
+                }
 
                 admin.database().ref('users/' + id).once('value').then(function(userSnapshot) {
                   var user = userSnapshot.val();
@@ -428,7 +403,7 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
                   templates.render('weddingInviteNotify.html', _details, function(err, html, text) {
                       mailOptions.html = html;
                       mailOptions.text = text;
-                      mailOptions.attachment = attch;
+                      mailOptions.attachment = attachment;
 
                       sendMail(mailOptions, function(error) {
                         if(error) {
@@ -495,14 +470,19 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
                           subject: "Bloom - Your wedding invites report", // Subject line
                           html: html, // html body
                           text: text, //Text equivalent
-                          attachment: attch
+                          attachment: attachment
                       };
 
                       sendMail(mailOptions, function() {
                         admin.database().ref('guestLists/' + snapshot.key).update({
                             completed: true
                         });
-                        // fs.unlink(response.outputPath);
+
+                        if(filepath) {
+                          fs.unlink(filepath, function() {
+                            console.log("PDF removed successfully");
+                          });
+                        }
                       });
                   });
                 }
@@ -578,7 +558,7 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
                     debug: false,
                     pretty: true
                 });
-                var filepath = path.join(__dirname, '../../datafiles/' + id + '.pdf');
+                var filepath = path.join(__dirname, '../../datafiles/' + id + 'sd.pdf');
                 pdf.create(template(details)).toFile(filepath, function(err, res) {
                   if (err) {
                     return reject(err);
@@ -610,10 +590,13 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
 
               function generateInvites (filepath) {
                 var attch;
+                var attachment;
                 details.attach = attachText;
 
-                var data1 = fs.readFileSync(filepath);
-                var attachment = new mailgun.Attachment({data: data1, filename: 'save-the-date.pdf'});
+                if(filepath) {
+                  var data1 = fs.readFileSync(filepath);
+                  attachment = new mailgun.Attachment({data: data1, filename: 'save-the-date.pdf'});
+                }
 
                 admin.database().ref('users/' + id).once('value').then(function(userSnapshot) {
                   var user = userSnapshot.val();
@@ -719,7 +702,7 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
                         });
                         if(filepath) {
                           fs.unlink(filepath, function() {
-                            console.log("PDF removed successfully")
+                            console.log("PDF removed successfully");
                           });
                         }
                       });

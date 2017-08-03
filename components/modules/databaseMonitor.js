@@ -16,7 +16,7 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
     var fs = rek('fs');
     var stream = rek('stream');
     var pdf = rek('html-pdf');
-    var handlebars = rek('handlebars');
+    var pug = rek('pug');
     var mailcomposer = rek('mailcomposer');
 
     /*======================================================================*\
@@ -571,23 +571,20 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
               var failed = [];
               var successCount = 0; //Check this + failed to match length and mail user
               var failCount = 0;
-              // var newpdf = new pdf('url', 'details.downloadURL');
-              // var options = { format: 'Letter' };
+
               var createPDF = new Promise((resolve, reject) => {
-                var src = path.join(__dirname, '../../templates/saveDateDefault.hbs');
-                var source = fs.readFileSync(src, 'utf8');
-                var template = handlebars.compile(source);
-                // var html = template(data);
-                // templates.render('saveDateDefault.html', details, function(err, html, text) {
-                  // var options = { };
-                  var filepath = path.join(__dirname, '../../datafiles/' + id + '.pdf');
-                  pdf.create(template).toFile(filepath, function(err, res) {
-                    if (err) {
-                      return reject(err);
-                    }
-                    resolve(res); // { filename: '/app/businesscard.pdf' }
-                  });
-                // });
+                var src = path.join(__dirname, "../../templates/saveDateDefault.pug");
+                template = pug.compileFile(src, {
+                    debug: false,
+                    pretty: true
+                });
+                var filepath = path.join(__dirname, '../../datafiles/' + id + '.pdf');
+                pdf.create(template(details)).toFile(filepath, function(err, res) {
+                  if (err) {
+                    return reject(err);
+                  }
+                  resolve(res); // { filename: 'name.pdf' }
+                });
               });
 
               var attachText = "";
@@ -605,19 +602,18 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
                   });
               } else {
                 createPDF.then((response)=>{
-                  attachText = "Please see your invite attached"
-                  console.log(response);
-                  // generateInvites();
+                  attachText = "Please see your invite attached";
+                  console.log("PDF generated successfully");
+                  generateInvites(response.filename);
                 });
               }
 
-              function generateInvites () {
+              function generateInvites (filepath) {
                 var attch;
                 details.attach = attachText;
 
-                // var file = path.resolve(__dirname, '../../datafiles/flower-l.png');
-                // var data1 = fs.readFileSync(file);
-                // var attch = new mailgun.Attachment({data: data1, filename: 'test.png'});
+                var data1 = fs.readFileSync(filepath);
+                var attachment = new mailgun.Attachment({data: data1, filename: 'save-the-date.pdf'});
 
                 admin.database().ref('users/' + id).once('value').then(function(userSnapshot) {
                   var user = userSnapshot.val();
@@ -632,7 +628,6 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
                     Object.assign(detailsCopy, guests[i]);
                     detailsCopy.to = guests[i].email;
                     detailsCopy.id = userSnapshot.key;
-                    // console.log(JSON.stringify(detailsCopy));
 
                     renderInvite(JSON.parse(JSON.stringify(detailsCopy)));
                   }
@@ -643,12 +638,12 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
                       from: "noreply@bloomweddings.co.za", // sender address
                       replyTo: email, //Reply to address
                       to: _details.to, // list of receivers
-                      subject: "Bloom - You have been invited to a wedding!" // Subject line
+                      subject: "Bloom - Save-the-date!" // Subject line
                   };
-                  templates.render('weddingInviteNotify.html', _details, function(err, html, text) {
+                  templates.render('saveDateNotify.html', _details, function(err, html, text) {
                       mailOptions.html = html;
                       mailOptions.text = text;
-                      mailOptions.attachment = attch;
+                      mailOptions.attachment = attachment;
 
                       sendMail(mailOptions, function(error) {
                         if(error) {
@@ -688,7 +683,7 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
 
                 // Mail user with invites sent report & missed invites list
                 function sendReportMail () {
-                  console.log("Wedding invites sent out successfully. Sending report mail");
+                  console.log("Save-the-date invites sent out successfully. Sending report mail");
                   //if any failed emails, create string from joining array
                   var failedEmailsStr = "";
                   var emailsFSub = "";
@@ -707,22 +702,26 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
                     attach: attachText
                   };
 
-                  templates.render('weddingInviteReport.html', reportDetails, function(err, html, text) {
+                  templates.render('saveDateReport.html', reportDetails, function(err, html, text) {
                       var mailOptions = {
                           from: "noreply@bloomweddings.co.za", // sender address
                           replyTo: "noreply@bloomweddings.co.za", //Reply to address
                           to: email, // list of receivers
-                          subject: "Bloom - Your wedding invites report", // Subject line
+                          subject: "Bloom - Your save-the-date invites report", // Subject line
                           html: html, // html body
                           text: text, //Text equivalent
-                          attachment: attch
+                          attachment: attachment
                       };
 
                       sendMail(mailOptions, function() {
-                        admin.database().ref('guestLists/' + snapshot.key).update({
+                        admin.database().ref('guestListSds/' + snapshot.key).update({
                             completed: true
                         });
-                        // fs.unlink(response.outputPath);
+                        if(filepath) {
+                          fs.unlink(filepath, function() {
+                            console.log("PDF removed successfully")
+                          });
+                        }
                       });
                   });
                 }

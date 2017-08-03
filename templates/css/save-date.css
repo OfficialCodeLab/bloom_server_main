@@ -1,11 +1,16 @@
+
+@import 'https://fonts.googleapis.com/css?family=Tangerine';
+@import url('https://fonts.googleapis.com/css?family=Rufina');
+
 @font-face {
   font-family: beaurencourt;
-  src: url(../fonts/BeaurencourtFY-Light_S.otf);
+  src: url('fonts/BeaurencourtFY-Light_S.otf');
 }
-@font-face {
-  font-family: rufina;
-  src: url(../fonts/rufina-regular.otf);
+
+.text-center {
+  text-align: center;
 }
+
 .default-sd-main-body {
   position: relative;
   padding: 5px;
@@ -21,32 +26,33 @@
 .default-sd-content {
   padding-left: 40px;
   padding-right: 40px;
+  padding-bottom: 50px;
 }
 .default-sd-content h2 {
-  margin-top: 60px;
-  margin-bottom: 60px;
-  line-height: 90px;
-  font-family: 'beaurencourt', cursive !important;
-  font-size: 6em !important;
-  color: #A2A2A2 !important;
+  margin-top: 20px;
+  margin-bottom: 40px;
+  line-height: 40px;
+  font-family: "Tangerine", cursive;
+  font-size: 60px;
+  color: #A2A2A2;
 }
 .default-sd-content h3 {
-  margin-top: 120px;
-  margin-bottom: 100px;
+  margin-top: 20px;
+  margin-bottom: 0px;
   line-height: 70px;
-  font-family: 'rufina', serif !important;
-  font-size: 4.8em !important;
-  color: #A2A2A2 !important;
-  text-transform: uppercase !important;
+  font-family: 'Rufina', serif;
+  font-size: 30px;
+  color: #A2A2A2;
+  text-transform: uppercase;
 }
 .default-sd-content p {
   line-height: 30px;
-  font-family: 'rufina', serif !important;
-  font-size: 2em !important;
-  color: #A2A2A2 !important;
-  text-transform: uppercase !important;
-  margin-bottom: 100px;
-  margin-top: 50px;
+  font-family: 'Rufina', serif;
+  font-size: 20px;
+  color: #A2A2A2;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  margin-top: 10px;
 }
 
 .default-sd-heading {

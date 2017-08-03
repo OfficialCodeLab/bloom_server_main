@@ -523,7 +523,7 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
         var list = snapshot.val();
 
         if(list.completed === false || list.completed === 'false') {
-          console.log("Save -The-Date invites created.");
+          console.log("Save-The-Date invites created.");
           var id = snapshot.key;
           var details = list.details;
           var name = "";
@@ -574,7 +574,7 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
               // var options = { format: 'Letter' };
               var createPDF = new Promise((resolve, reject) => {
 
-                templates.render('saveDateDefault.html', _details, function(err, html, text) {
+                templates.render('saveDateDefault.html', details, function(err, html, text) {
                   var options = { };
                   var filepath = path.join(__dirname, '../../datafiles/' + id + '.pdf');
                   pdf.create(html, options).toFile(filepath, function(err, res) {

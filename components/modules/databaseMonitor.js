@@ -577,11 +577,11 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
                 var src = path.join(__dirname, '../../templates/saveDateDefault.hbs');
                 var source = fs.readFileSync(src, 'utf8');
                 var template = handlebars.compile(source);
-                var html = template(data);
+                // var html = template(data);
                 // templates.render('saveDateDefault.html', details, function(err, html, text) {
                   // var options = { };
                   var filepath = path.join(__dirname, '../../datafiles/' + id + '.pdf');
-                  pdf.create(html).toFile(filepath, function(err, res) {
+                  pdf.create(template).toFile(filepath, function(err, res) {
                     if (err) {
                       return reject(err);
                     }

@@ -29,6 +29,9 @@ html, body {
   font-family: "Open Sans", sans-serif !important;
 }
 
+.main-body {
+  background-color: #f9f9f9;
+}
 
 .main-block {
 	color: black;

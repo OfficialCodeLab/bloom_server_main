@@ -15,6 +15,7 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
     var path = rek('path');
     var fs = rek('fs');
     var stream = rek('stream');
+    var pdf = rek('html-pdf');
     var mailcomposer = rek('mailcomposer');
 
     /*======================================================================*\
@@ -386,6 +387,223 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
                 createPDF.then((response)=>{
                   attachText = "Please see your invite attached"
                   generateInvites();
+                });
+              }
+
+              function generateInvites () {
+                var attch;
+                details.attach = attachText;
+
+                // var file = path.resolve(__dirname, '../../datafiles/flower-l.png');
+                // var data1 = fs.readFileSync(file);
+                // var attch = new mailgun.Attachment({data: data1, filename: 'test.png'});
+
+                admin.database().ref('users/' + id).once('value').then(function(userSnapshot) {
+                  var user = userSnapshot.val();
+                  name = user.name;
+                  email = user.email;
+
+                  for (var i = 0; i < guests.length; i++) {
+                    // do something with each guests[i]
+
+                    // merge data
+                    var detailsCopy = details;
+                    Object.assign(detailsCopy, guests[i]);
+                    detailsCopy.to = guests[i].email;
+                    detailsCopy.id = userSnapshot.key;
+                    // console.log(JSON.stringify(detailsCopy));
+
+                    renderInvite(JSON.parse(JSON.stringify(detailsCopy)));
+                  }
+                });
+
+                function renderInvite (_details) {
+                  var mailOptions = {
+                      from: "noreply@bloomweddings.co.za", // sender address
+                      replyTo: email, //Reply to address
+                      to: _details.to, // list of receivers
+                      subject: "Bloom - You have been invited to a wedding!" // Subject line
+                  };
+                  templates.render('weddingInviteNotify.html', _details, function(err, html, text) {
+                      mailOptions.html = html;
+                      mailOptions.text = text;
+                      mailOptions.attachment = attch;
+
+                      sendMail(mailOptions, function(error) {
+                        if(error) {
+                          failed.push(_details.id);
+                          failCount++;
+                        } else {
+                          successCount++;
+                        }
+                      });
+                  });
+                }
+
+                //Completion checker
+                var completeCount = 0;
+
+                var complete = {
+                    init: function() {
+                        complete.checkCompletion();
+                    },
+                    checkCompletion: function() {
+                        if(guests.length === successCount + failCount) {
+                          //completed, mail user
+                          sendReportMail();
+                        } else {
+                          completeCount++;
+                          if(completeCount >= 120) { //Timeout: 120 checks @ 1 per 5 sec -> 10 mins
+                            //completed but timeout, mail user
+                            sendReportMail();
+                          } else {
+                            setTimeout(complete.checkCompletion, 5000);
+                          }
+                        }
+                    }
+                }
+
+                complete.init();
+
+                // Mail user with invites sent report & missed invites list
+                function sendReportMail () {
+                  console.log("Wedding invites sent out successfully. Sending report mail");
+                  //if any failed emails, create string from joining array
+                  var failedEmailsStr = "";
+                  var emailsFSub = "";
+                  if(failed.length > 0) {
+                    failedEmailsStr = failed.join(', ');
+                    emailsFSub = "Please contact support with this list."
+                  } else {
+                    failedEmailsStr = "All invites were successfully sent.";
+                  }
+
+                  var reportDetails = {
+                    name: name,
+                    emailsCount: successCount,
+                    emailsFailed: failedEmailsStr,
+                    emailsFSub: emailsFSub,
+                    attach: attachText
+                  };
+
+                  templates.render('weddingInviteReport.html', reportDetails, function(err, html, text) {
+                      var mailOptions = {
+                          from: "noreply@bloomweddings.co.za", // sender address
+                          replyTo: "noreply@bloomweddings.co.za", //Reply to address
+                          to: email, // list of receivers
+                          subject: "Bloom - Your wedding invites report", // Subject line
+                          html: html, // html body
+                          text: text, //Text equivalent
+                          attachment: attch
+                      };
+
+                      sendMail(mailOptions, function() {
+                        admin.database().ref('guestLists/' + snapshot.key).update({
+                            completed: true
+                        });
+                        // fs.unlink(response.outputPath);
+                      });
+                  });
+                }
+              }
+            });
+
+
+          });
+
+        }
+
+    });
+
+    /*======================================================================*\
+        If a guestListSd is created
+    \*======================================================================*/
+    admin.database().ref('guestListSds').on('child_added', function(snapshot) {
+
+        var list = snapshot.val();
+
+        if(list.completed === false || list.completed === 'false') {
+          console.log("Save -The-Date invites created.");
+          var id = snapshot.key;
+          var details = list.details;
+          var name = "";
+          var email = "";
+
+          admin.database().ref('weddings/' + id).once('value').then(function(_snapshot) {
+            var wedding = _snapshot.val();
+            let guests = wedding.guests;
+            // var length = guests.length;
+            var promiseArr = [];
+            var count = 0;
+            //for each guest do the following
+            //Object.assign(obj1, obj2); to merge
+
+            for (var key in guests) {
+              if (guests.hasOwnProperty(key)) {
+
+                promiseArr[count] = new Promise((resolve, reject) => {
+                  var _id = key;
+                  admin.database().ref('guests/' + _id).once('value').then(function(__snapshot) {
+                    var guest = __snapshot.val();
+                    var name = guest.name;
+                    var email = guest.email;
+                    var guest = {
+                      id: _id,
+                      name: name,
+                      email: email
+                    };
+                    resolve(guest);
+                  }, function(){
+                    var failed = {
+                      id: _id,
+                      error: "Could not find guest"
+                    };
+                    resolve(failed);
+                  });
+                });
+              }
+              count++;
+            }
+
+            Promise.all(promiseArr).then((guests) => {
+
+              var failed = [];
+              var successCount = 0; //Check this + failed to match length and mail user
+              var failCount = 0;
+              // var newpdf = new pdf('url', 'details.downloadURL');
+              // var options = { format: 'Letter' };
+              var createPDF = new Promise((resolve, reject) => {
+
+                templates.render('saveDateDefault.html', _details, function(err, html, text) {
+                  var options = { };
+                  var filepath = path.join(__dirname, '../../datafiles/' + id + '.pdf');
+                  pdf.create(html, options).toFile(filepath, function(err, res) {
+                    if (err) {
+                      return reject(err);
+                    }
+                    resolve(res); // { filename: '/app/businesscard.pdf' }
+                  });
+                });
+              });
+
+              var attachText = "";
+
+              if(details.downloadURL) {
+                googl.shorten(details.downloadURL)
+                  .then(function (shortUrl) {
+                      attachText = "Please view your invite here: " + shortUrl;
+                      generateInvites();
+                  })
+                  .catch(function (err) {
+                      console.error(err.message);
+                      attachText = "Please view your invite here: " + details.downloadURL;
+                      generateInvites();
+                  });
+              } else {
+                createPDF.then((response)=>{
+                  attachText = "Please see your invite attached"
+                  console.log(response);
+                  // generateInvites();
                 });
               }
 

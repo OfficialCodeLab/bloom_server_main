@@ -275,8 +275,8 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
         if(list.completed === false || list.completed === 'false') {
           console.log("Wedding invites created.");
           var id = snapshot.key;
-          var acceptUrl = "https://bloomweddings.co.za/weddingInvite?id=" + id;
-          var declineUrl = "https://bloomweddings.co.za/weddingInvite?id=" + id;
+          var acceptUrl = "https://bloomweddings.co.za/wedding-invite?id=" + id;
+          var declineUrl = "https://bloomweddings.co.za/wedding-invite?id=" + id;
           var details = list.details;
           var name = "";
           var email = "";

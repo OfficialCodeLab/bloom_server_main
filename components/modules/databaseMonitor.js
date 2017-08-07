@@ -18,6 +18,8 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
     var pdf = rek('html-pdf');
     var pug = rek('pug');
     var mailcomposer = rek('mailcomposer');
+    const bloom_main_address = "Bloom Weddings <noreply@bloomweddings.co.za>";
+    const bloom_support_address = "Bloom Support <support@bloomweddings.co.za>";
 
     /*======================================================================*\
         If the child of a user changes, run this code.
@@ -113,7 +115,7 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
             });
         } else {
 
-            mailTo = "support@bloomweddings.co.za";
+            mailTo = bloom_support_address;
             var customMessage = {
                 senderName: "Anonymous User",
                 receiverName: "Bloom Support",
@@ -167,8 +169,8 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
             } else { // USER
                 templates.render('accountCreationUser.html', userDetails, function(err, html, text) {
                     var mailOptions = {
-                        from: "noreply@bloomweddings.co.za", // sender address
-                        replyTo: "noreply@bloomweddings.co.za", //Reply to address
+                        from: bloom_main_address, // sender address
+                        replyTo: bloom_main_address, //Reply to address
                         to: user.email, // list of receivers
                         subject: "Bloom - User Account Created", // Subject line
                         html: html, // html body
@@ -211,8 +213,8 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
 
             templates.render('accountCreationVendor.html', userDetails, function(err, html, text) {
                 var mailOptions = {
-                    from: "noreply@bloomweddings.co.za", // sender address
-                    replyTo: "noreply@bloomweddings.co.za", //Reply to address
+                    from: bloom_main_address, // sender address
+                    replyTo: bloom_main_address, //Reply to address
                     to: login.email, // list of receivers
                     subject: "Bloom - Vendor Account Created", // Subject line
                     html: html, // html body
@@ -237,8 +239,8 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
 
             templates.render('accountCreationBcc.html', userDetails, function(err, html, text) {
                 var mailOptions2 = {
-                    from: "noreply@bloomweddings.co.za", // sender address
-                    replyTo: "noreply@bloomweddings.co.za", //Reply to address
+                    from: bloom_main_address, // sender address
+                    replyTo: bloom_main_address, //Reply to address
                     to: "bruce@bloomweddings.co.za, ineke@bloomweddings.co.za", // list of receivers
                     subject: "Bloom - Vendor Account Created", // Subject line
                     html: html, // html body
@@ -395,7 +397,7 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
 
                 function renderInvite (_details) {
                   var mailOptions = {
-                      from: "noreply@bloomweddings.co.za", // sender address
+                      from: bloom_main_address, // sender address
                       replyTo: email, //Reply to address
                       to: _details.to, // list of receivers
                       subject: "Bloom - You have been invited to a wedding!" // Subject line
@@ -464,8 +466,8 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
 
                   templates.render('weddingInviteReport.html', reportDetails, function(err, html, text) {
                       var mailOptions = {
-                          from: "noreply@bloomweddings.co.za", // sender address
-                          replyTo: "noreply@bloomweddings.co.za", //Reply to address
+                          from: bloom_support_address, // sender address
+                          replyTo: bloom_support_address, //Reply to address
                           to: email, // list of receivers
                           subject: "Bloom - Your wedding invites report", // Subject line
                           html: html, // html body
@@ -618,7 +620,7 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
 
                 function renderInvite (_details) {
                   var mailOptions = {
-                      from: "noreply@bloomweddings.co.za", // sender address
+                      from: bloom_main_address, // sender address
                       replyTo: email, //Reply to address
                       to: _details.to, // list of receivers
                       subject: "Bloom - Save-the-date!" // Subject line
@@ -687,8 +689,8 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
 
                   templates.render('saveDateReport.html', reportDetails, function(err, html, text) {
                       var mailOptions = {
-                          from: "noreply@bloomweddings.co.za", // sender address
-                          replyTo: "noreply@bloomweddings.co.za", //Reply to address
+                          from: bloom_support_address, // sender address
+                          replyTo: bloom_support_address, //Reply to address
                           to: email, // list of receivers
                           subject: "Bloom - Your save-the-date invites report", // Subject line
                           html: html, // html body
@@ -737,8 +739,8 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
         if (true) { // Edit preferences will change this
             templates.render('innerCircleInvite.html', details, function(err, html, text) {
                 var mailOptions = {
-                    from: "noreply@bloomweddings.co.za", // sender address
-                    replyTo: "noreply@bloomweddings.co.za", //Reply to address
+                    from: bloom_main_address, // sender address
+                    replyTo: bloom_main_address, //Reply to address
                     to: invite.emailId, // list of receivers
                     subject: "Bloom - Inner Circle Invite", // Subject line
                     html: html, // html body

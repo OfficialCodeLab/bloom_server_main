@@ -71,7 +71,7 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
         var mailTo = "";
         if (message.to) {
             mailTo = message.to
-            if(message.senderId !== "anonymous") {
+            if(message.senderId !== "Anonymous user") {
                 admin.database().ref('users/' + message.senderId).once('value').then(function(_snapshot) {
                     admin.database().ref('weddings/' + message.senderId).once('value').then(function(__snapshot) {
                         var guestC = "Unknown";

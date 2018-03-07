@@ -71,48 +71,73 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
         var mailTo = "";
         if (message.to) {
             mailTo = message.to
-            admin.database().ref('users/' + message.senderId).once('value').then(function(_snapshot) {
-                admin.database().ref('weddings/' + message.senderId).once('value').then(function(__snapshot) {
-                    var guestC = "Unknown";
-                    var weddingDateFormatted = "Unknown";
-                    if (message.sendInfo) {
-                        var wedding = __snapshot.val();
-                        if (wedding.estimatedGuests) {
-                            guestC = wedding.estimatedGuests;
-                        } else if (wedding.guestsTotal) {
-                            guestC = wedding.guestsTotal;
+            if(message.senderId !== "anonymous") {
+                admin.database().ref('users/' + message.senderId).once('value').then(function(_snapshot) {
+                    admin.database().ref('weddings/' + message.senderId).once('value').then(function(__snapshot) {
+                        var guestC = "Unknown";
+                        var weddingDateFormatted = "Unknown";
+                        if (message.sendInfo) {
+                            var wedding = __snapshot.val();
+                            if (wedding.estimatedGuests) {
+                                guestC = wedding.estimatedGuests;
+                            } else if (wedding.guestsTotal) {
+                                guestC = wedding.guestsTotal;
+                            }
+                            try {
+                                var weddingDate = moment(wedding.weddingDate);
+                                weddingDateFormatted = weddingDate.format('Do MMM YYYY');
+                            } catch (ex) {}
                         }
-                        try {
-                            var weddingDate = moment(wedding.weddingDate);
-                            weddingDateFormatted = weddingDate.format('Do MMM YYYY');
-                        } catch (ex) {}
-                    }
 
-                    var customMessage = {
-                        senderName: _snapshot.val().name || "User",
-                        receiverName: message.receiverName,
-                        guestCount: guestC,
-                        weddingDate: weddingDateFormatted,
-                        messageText: message.html
-                    };
-                    templates.render('messageRequestVendor.html', customMessage, function(err, html, text) {
-                        var mailOptions = {
-                            from: message.from, // sender address
-                            replyTo: message.from, //Reply to address
-                            to: mailTo, // list of receivers
-                            subject: message.subject, // Subject line
-                            html: html, // html body
-                            text: text //Text equivalent
+                        var customMessage = {
+                            senderName: _snapshot.val().name || "User",
+                            receiverName: message.receiverName,
+                            guestCount: guestC,
+                            weddingDate: weddingDateFormatted,
+                            messageText: message.html
                         };
+                        templates.render('messageRequestVendor.html', customMessage, function(err, html, text) {
+                            var mailOptions = {
+                                from: message.from, // sender address
+                                replyTo: message.from, //Reply to address
+                                to: mailTo, // list of receivers
+                                subject: message.subject, // Subject line
+                                html: html, // html body
+                                text: text //Text equivalent
+                            };
 
-                        sendMail(mailOptions, function() {
-                          admin.database().ref('messages/' + snapshot.key).remove();
+                            sendMail(mailOptions, function() {
+                              admin.database().ref('messages/' + snapshot.key).remove();
+                            });
+
                         });
-
                     });
-                });
 
-            });
+                });
+            } else {
+                var customMessage = {
+                    senderName: "Anonymous User",
+                    receiverName: message.receiverName,
+                    guestCount: "Unknown",
+                    weddingDate: "Unknown",
+                    messageText: message.html
+                };
+                templates.render('messageRequestVendor.html', customMessage, function(err, html, text) {
+                    var mailOptions = {
+                        from: message.from, // sender address
+                        replyTo: message.from, //Reply to address
+                        to: mailTo, // list of receivers
+                        subject: message.subject, // Subject line
+                        html: html, // html body
+                        text: text //Text equivalent
+                    };
+
+                    sendMail(mailOptions, function() {
+                        admin.database().ref('messages/' + snapshot.key).remove();
+                    });
+
+                });
+            }
         } else {
 
             mailTo = bloom_support_address;
@@ -900,7 +925,7 @@ function init(admin, templates, transporter, mailgun, rek, googl) {
 
     function sendMail (mailOptions, callback) {
       if(mailOptions.to) {
-        if(validateEmail(mailOptions.to)){
+        if(mailOptions.to === bloom_support_address ? true : validateEmail(mailOptions.to)){
 
               var data = {
                 from: mailOptions.from,
